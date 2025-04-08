@@ -32,15 +32,35 @@ class InferenceEngine:
 		label_tensor = torch.randint(MIN_FEATURE_INDEX, MAX_FEATURE_INDEX+1, (1, FEATURE_COUNT), dtype=torch.int32, device=self.device)
 		_ = self.model.decode(latent_tensor, label_tensor)
 
-
-	def generate(self, latent_tensor: Tensor, request: CNNRequest) -> Tensor:
+	
+	def build_feature_tensor(self, request: CNNRequest) -> Tensor:
 		# Build the Feature Tensor
 		feature_tensor = torch.empty((1, FEATURE_COUNT), dtype=torch.int32, device=self.device)
 		for i, feature in enumerate(request):
 			name, value = feature
 			feature_tensor[0, i] = self.feature_map[(name, value)]
 
+		return feature_tensor
+
+
+	def generate(self, latent_tensor: Tensor, request: CNNRequest) -> Tensor:
+		# Prepare the input tensors
+		latent_tensor = latent_tensor.to(self.device)
+		feature_tensor = self.build_feature_tensor(request)
+
 		with torch.no_grad():
 			image = self.model.decode(latent_tensor, feature_tensor)
 
 		return image
+	
+
+	def encode(self, image: Tensor, request: CNNRequest) -> Tensor:
+		# Prepare the input tensors
+		image = image.to(self.device)
+		feature_tensor = self.build_feature_tensor(request)
+
+		with torch.no_grad():
+			mu, logvar = self.model.encode(image, feature_tensor)
+			z = self.model.reparameterize(mu, logvar)
+
+		return z

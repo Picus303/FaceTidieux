@@ -41,6 +41,10 @@ if __name__ == "__main__":
 	# Convert the image tensor to numpy array
 	image_array = image_tensor.squeeze(0).permute(1, 2, 0).cpu().numpy()
 
+	# Encode the generated image
+	encoded_image = engine.encode(image_tensor, request)
+	print(f"Encoded Image Shape: {encoded_image.shape}")
+
 	# Display the image
 	plt.imshow(image_array)
 	plt.axis("off")
