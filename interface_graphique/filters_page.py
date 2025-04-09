@@ -2,6 +2,7 @@
 import flet as ft
 import json
 
+
 def filters_view(page: ft.Page):
     font_family = "Times New Roman"
 
@@ -74,6 +75,8 @@ def filters_view(page: ft.Page):
         # 2. On enregistre le dictionnaire dans un fichier JSON
         with open("filtres.json", "w", encoding="utf-8") as fichier_json:
             json.dump(filters_dict, fichier_json, ensure_ascii=False, indent=4)
+        
+
 
         # 3. On redirige vers la page suivante (ou on peut rester sur la même page, selon vos besoins)
         page.go("/next")
