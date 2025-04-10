@@ -79,7 +79,7 @@ def filters_view(page: ft.Page):
 
 
         # 3. On redirige vers la page suivante (ou on peut rester sur la même page, selon vos besoins)
-        page.go("/next")
+        page.go("/select")
 
     # -- Colonnes de gauche et de droite
     col_left = ft.Column([

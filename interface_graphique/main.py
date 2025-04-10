@@ -6,11 +6,10 @@ Created on Wed Mar 26 00:54:43 2025
 @author: ouijdanejerid
 """
 
-from interface_graphique.page_acceuil import *
-print('ok')
-from interface_graphique.tuto_page import *
-from interface_graphique.filters_page import *
-from interface_graphique.selection_page import *
+from .page_acceuil import *
+from .tuto_page import *
+from .filters_page import *
+from .selection_page import *
 import flet as ft
 
 

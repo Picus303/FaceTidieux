@@ -66,5 +66,6 @@ if __name__ == "__main__":
         
 	# Convert the image tensor to numpy array
         image_array = image_tensor.squeeze(0).permute(1, 2, 0).cpu().numpy()
+        rotated_image_array = np.rot90(image_array, k=-1)
     
-        plt.imsave(f"generate_images/image{i}.png", image_array)
+        plt.imsave(f"generate_images/image{i}.png", rotated_image_array)

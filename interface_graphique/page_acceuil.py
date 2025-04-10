@@ -2,7 +2,7 @@ import flet as ft
 import asyncio
 
 from PIL import Image
-from interface_graphique.tuto_page import *
+from .tuto_page import *
 
 def accueil_view(page):
     page.title = "FaceGen"
