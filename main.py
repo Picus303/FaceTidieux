@@ -10,13 +10,17 @@ import flet as ft
 from cnn_backend import InferenceEngine
 from cnn_backend.utils import CNNRequest
 from interface_graphique.main import main
+#from interactions.image_generator import ImageGenerator
 
 
 if __name__ == "__main__":
     
     asyncio.run(ft.app_async(target=main))
+    
 
-	# Initialize the Inference Engine
+    
+
+    # Initialize the Inference Engine
     engine = InferenceEngine()
 
 
