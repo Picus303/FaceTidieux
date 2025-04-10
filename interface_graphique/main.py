@@ -6,10 +6,11 @@ Created on Wed Mar 26 00:54:43 2025
 @author: ouijdanejerid
 """
 
-from page_acceuil import *
-from tuto_page import *
-from filters_page import *
-from selection_page import *
+from interface_graphique.page_acceuil import *
+print('ok')
+from interface_graphique.tuto_page import *
+from interface_graphique.filters_page import *
+from interface_graphique.selection_page import *
 import flet as ft
 
 
@@ -39,5 +40,5 @@ async def main(page: ft.Page):
     page.on_route_change = route_change
     page.go("/")  # Commencer par la page d’accueil
 
-import asyncio
-asyncio.run(ft.app_async(target=main))
+#import asyncio
+#asyncio.run(ft.app_async(target=main))
