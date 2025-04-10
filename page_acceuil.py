@@ -2,7 +2,7 @@ import flet as ft
 import asyncio
 
 from PIL import Image
-from tuto_page import *
+from interface_graphique.tuto_page import *
 
 def accueil_view(page):
     page.title = "FaceGen"
@@ -57,14 +57,14 @@ def accueil_view(page):
     # IMAGES superposées
     img_stack = ft.Stack([
     # Image 3 : tout au fond, la plus grande
-    ft.Image(src="./im3.png", width=510, top=10, left=25 ,bottom = 3),
+    ft.Image(src="interface_graphique/im3.png", width=510, top=10, left=25 ,bottom = 3),
 
 
     # Image 2 : par-dessus, centrée
-    ft.Image(src="./im1.png", width=500, top=3, left=15,bottom = 50),
+    ft.Image(src="interface_graphique/im1.png", width=500, top=3, left=15,bottom = 50),
 
     # Image 1 : légèrement décalée
-    ft.Image(src="./im2.png",  width=480, top=11, left=10, bottom =0),
+    ft.Image(src="interface_graphique/im2.png",  width=480, top=11, left=10, bottom =0),
 
 ], width=470, height=290)
 

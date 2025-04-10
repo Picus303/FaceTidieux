@@ -11,7 +11,7 @@ import os
 import random
 import json
 
-IMAGE_DIR = "images"  # Dossier local contenant les portraits (PNG, JPG, JPEG)
+IMAGE_DIR = "interface_graphique/images"  # Dossier local contenant les portraits (PNG, JPG, JPEG)
 
 def get_random_images():
     """Récupère 6 images aléatoires (ou moins si le dossier n'en contient pas assez)."""
@@ -76,16 +76,15 @@ def select_portraits_view(page: ft.Page):
         les noms des images sélectionnées dans un fichier JSON.
         """
         selected_images = [img_info["img_name"] for img_info in displayed_images if img_info["selected"]]
-        filters_dict = {
-            "filters_applied": False,  # Aucun filtre n'est appliqué, c'est une sélection manuelle
-            "selected_images": selected_images
+        images_dict = {
+            "selected_image": selected_images
         }
-        with open("filtres.json", "w", encoding="utf-8") as fichier_json:
-            json.dump(filters_dict, fichier_json, ensure_ascii=False, indent=4)
+        with open("images_selected.json", "w", encoding="utf-8") as fichier_json:
+            json.dump(images_dict, fichier_json, ensure_ascii=False, indent=4)
         page.go("/next")
 
     title = ft.Text(
-        "Select some Portraits by clicking on them",
+        "Select one ore more portraits",
         size=22,
         weight=ft.FontWeight.BOLD,
         font_family=font_family
