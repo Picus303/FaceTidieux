@@ -2,6 +2,8 @@
 import flet as ft
 import json
 
+from interactions.generator_images import ImageGenerator
+
 
 def filters_view(page: ft.Page):
     font_family = "Times New Roman"
@@ -83,10 +85,12 @@ def filters_view(page: ft.Page):
             "Young": young_dropdown.value
         }
 
-        with open("filtres.json", "w", encoding="utf-8") as fichier_json:
+        with open("interface_graphique/filtres.json", "w", encoding="utf-8") as fichier_json:
             json.dump(filters_dict, fichier_json, ensure_ascii=False, indent=4)
 
         page.go("/select")
+        generator = ImageGenerator()
+        generator.generate_all()
 
     # -- Colonnes (à répartir comme tu préfères)
     col_left = ft.Column([

@@ -34,29 +34,34 @@ class ImageGenerator:
             return json.load(f)
 
     def generate_all(self):
+        
+        with open(self.json_path, "r", encoding="utf-8") as f:
+            filters_dict = json.load(f)
+        
+        
         for i in range(self.n_images):
             latent_tensor = torch.randn((1, 128), device=self.engine.device)
 
             request = CNNRequest(  # ici tu peux aussi injecter `self.filters_dict` si nécessaire
-                Hair_Color='Black',
-                Sideburns="No",
-                Bangs="Yes",
-                No_Beard="Yes",
-                Wearing_Necktie="No",
-                Big_Lips="Unknown",
-                Wearing_Lipstick="Yes",
-                Straight_Hair="No",
-                Chubby="No",
-                Big_Nose="No",
-                Pointy_Nose="Yes", 
-                Goatee="No",
-                Male="No", 
-                Receding_Hairline="No", 
-                Wearing_Necklace="Unknown", 
-                Eyeglasses="Yes", 
-                Wavy_Hair="Yes", 
-                Wearing_Earrings="Yes", 
-                Young="Yes"
+                Hair_Color=filters_dict['Hair_Color'],
+                Sideburns=filters_dict['Sideburns'],
+                Bangs=filters_dict['Bangs'],
+                No_Beard=filters_dict['No_Beard'],
+                Wearing_Necktie=filters_dict['Wearing_Necktie'],
+                Big_Lips=filters_dict['Big_Lips'],
+                Wearing_Lipstick=filters_dict['Wearing_Lipstick'],
+                Straight_Hair=filters_dict['Straight_Hair'],
+                Chubby=filters_dict['Chubby'],
+                Big_Nose=filters_dict['Big_Nose'],
+                Pointy_Nose=filters_dict['Pointy_Nose'], 
+                Goatee=filters_dict['Goatee'],
+                Male=filters_dict['Male'], 
+                Receding_Hairline=filters_dict['Receding_Hairline'], 
+                Wearing_Necklace=filters_dict['Wearing_Necklace'], 
+                Eyeglasses=filters_dict['Eyeglasses'], 
+                Wavy_Hair=filters_dict['Wavy_Hair'], 
+                Wearing_Earrings=filters_dict['Wearing_Earrings'], 
+                Young=filters_dict['Young']
             )
 
             image_tensor = self.engine.generate(latent_tensor, request)

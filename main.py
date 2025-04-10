@@ -10,7 +10,7 @@ import flet as ft
 from cnn_backend import InferenceEngine
 from cnn_backend.utils import CNNRequest
 from interface_graphique.main import main
-#from interactions.image_generator import ImageGenerator
+from interactions.generator_images import ImageGenerator
 
 
 if __name__ == "__main__":
@@ -18,9 +18,10 @@ if __name__ == "__main__":
     asyncio.run(ft.app_async(target=main))
     
 
-    
+    generator = ImageGenerator()
+    generator.generate_all()
 
-    # Initialize the Inference Engine
+"""    # Initialize the Inference Engine
     engine = InferenceEngine()
 
 
@@ -72,4 +73,4 @@ if __name__ == "__main__":
         image_array = image_tensor.squeeze(0).permute(1, 2, 0).cpu().numpy()
         rotated_image_array = np.rot90(image_array, k=-1)
     
-        plt.imsave(f"generate_images/image{i}.png", rotated_image_array)
+        plt.imsave(f"generate_images/image{i}.png", rotated_image_array)"""
