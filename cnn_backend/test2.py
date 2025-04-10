@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 
 from . import InferenceEngine
 from .utils import CNNRequest
+#from .genetic_operations import Mutations
 
 
 if __name__ == "__main__":
@@ -29,6 +30,22 @@ if __name__ == "__main__":
 	#lv2 = (latent_tensor2 - latent_tensor2.mean()) / latent_tensor2.std()
 	#latent_tensor_fused = (lv1 + lv2) / 2
 
+	"""
+	# Test integrating the class Mutations (that get in input a vector containing one or more latent vector and return them modified)
+	latent_loaded = torch.load("randn_latent_tensor.pt")
+	latent_loaded2 = torch.load("randn_latent_tensor_copie.pt")
+	list_of_latent_vectors = []
+	list_of_latent_vectors.append(latent_loaded)
+	list_of_latent_vectors.append(latent_loaded2)
+	print(f"This is an extract of the first latent vector from the actual list : {list_of_latent_vectors[0][0, :4, :2, :2]}")
+
+	test_unitary2 = Mutations(list_of_latent_vectors)
+	res = test_unitary2.fusion()
+	if len(res) != 0:
+		print(f"This is an extract of the first latent vector from the new list : {res[0][0, :4, :2, :2]}")
+	else:
+		print(" Nothing has been done")
+	"""
 
 
 	# Build the request
@@ -62,17 +79,14 @@ if __name__ == "__main__":
 
 	# Generate the image n°2
 	image_tensor2 = engine.generate(latent_tensor2, request)
-	# Convert the image tensor to numpy array
 	stored_image_array2 = image_tensor2.squeeze(0).permute(1, 2, 0).cpu().numpy()
 
 	# Generate the fused image
 	image_tensor_fused = engine.generate(latent_tensor_fused, request)
-	# Convert the image tensor to numpy array
 	fused_image_array = image_tensor_fused.squeeze(0).permute(1, 2, 0).cpu().numpy()
 
 	stored_image_array.append(stored_image_array1)
 	stored_image_array.append(stored_image_array2)
-	#stored_image_array.append(stored_image_array1)
 	stored_image_array.append(fused_image_array)
 
 	"""
