@@ -14,6 +14,7 @@ if __name__ == "__main__":
 	# Generate a random latent tensor
 	latent_tensor1 = torch.randn((1, 128), device=engine.device)
 	latent_tensor2 = torch.randn((1, 128), device=engine.device)
+	latent_tensor3 = torch.randn((1, 128), device=engine.device)
 
 	# Generate the fusion of both of these tensor :
 
@@ -35,10 +36,18 @@ if __name__ == "__main__":
 	list_of_latent_vectors = []
 	list_of_latent_vectors.append(latent_tensor1)
 	list_of_latent_vectors.append(latent_tensor2)
+	list_of_latent_vectors.append(latent_tensor3)
 
-	test_unitary2 = Mutations(list_of_latent_vectors)
-	list_fused_latent_vectors = test_unitary2.fusion()
+	#test_unitary2 = Mutations(list_of_latent_vectors)
+	#list_fused_latent_vectors = test_unitary2.fusion()
 
+	# Test for weight parameter :
+	#test_unitary3 = Mutations(list_of_latent_vectors, weight=1)
+	#list_fused_latent_vectors = test_unitary3.fusion()
+
+	# Test for number_of_new parameter :
+	test_unitary4 = Mutations(list_of_latent_vectors, number_of_new=6)
+	list_fused_latent_vectors = test_unitary4.fusion()
 
 
 	# Build the request
