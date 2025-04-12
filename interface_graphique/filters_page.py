@@ -91,10 +91,10 @@ def filters_view(page: ft.Page):
         }
         with open("interface_graphique/filtres.json", "w", encoding="utf-8") as fichier_json:
             json.dump(filters_dict, fichier_json, ensure_ascii=False, indent=4)
-
-        page.go("/select")
         generator = ImageGenerator()
         generator.generate_all()
+        page.go("/select")
+
 
     # -- Colonnes (à répartir comme tu préfères)
     col_left = ft.Column([

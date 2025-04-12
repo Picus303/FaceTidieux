@@ -33,14 +33,22 @@ class ImageGenerator:
         with open(self.json_path, "r", encoding="utf-8") as f:
             return json.load(f)
 
-    def generate_all(self):
+    def generate_all(self, latent_tensors=None):
         
         with open(self.json_path, "r", encoding="utf-8") as f:
             filters_dict = json.load(f)
         
         
         for i in range(self.n_images):
-            latent_tensor = torch.randn((1, 128), device=self.engine.device)
+            # Soit on prend un latent donné, soit on le génère
+            if latent_tensors is not None and i < len(latent_tensors):
+               latent_tensor = latent_tensors[i].to(self.engine.device)
+            else:
+               latent_tensor = torch.randn((1, 128), device=self.engine.device)
+            
+            
+            # Sauvegarde du vecteur latent
+            torch.save(latent_tensor, self.output_dir / f"latent{i}.pth")
 
             request = CNNRequest(  # ici tu peux aussi injecter `self.filters_dict` si nécessaire
                 Hair_Color=filters_dict['Hair_Color'],
@@ -66,8 +74,6 @@ class ImageGenerator:
 
             image_tensor = self.engine.generate(latent_tensor, request)
 
-            # Sauvegarde du tensor
-            torch.save(image_tensor, self.output_dir / f"tensor_image{i}.pth")
 
             # Conversion en image PNG
             image_array = image_tensor.squeeze(0).permute(1, 2, 0).cpu().numpy()

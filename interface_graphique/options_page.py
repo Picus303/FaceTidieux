@@ -10,6 +10,7 @@ import flet as ft
 import json
 import os 
 from .selection_page import *
+from interactions.generator_fusion_images import LatentFusionPipeline
 
 def selected_result_view(page: ft.Page):
     font_family = "Times New Roman"
@@ -57,6 +58,8 @@ def selected_result_view(page: ft.Page):
         # À remplacer par ta vraie logique de mutation
         print("Mutation des portraits...")
         page.snack_bar = ft.SnackBar(ft.Text("Mutating portraits... (to implement)"))
+        pipeline = LatentFusionPipeline(n_outputs=6)
+        pipeline.run()
         page.snack_bar.open = True
         page.update()
 

@@ -20,10 +20,11 @@ if __name__ == "__main__":
     
     asyncio.run(ft.app_async(target=main))
     
-
+    """
     generator = ImageGenerator()
     generator.generate_all()
-    """
+    
+    
     # Initialize the Inference Engine
     engine = InferenceEngine()
 
@@ -56,8 +57,8 @@ if __name__ == "__main__":
     list_of_latent_vectors.append(latent_tensor1)
     list_of_latent_vectors.append(latent_tensor2)
 
-    test_unitary2 = Mutations(list_of_latent_vectors)
-    list_fused_latent_vectors = test_unitary2.fusion()
+    test_unitary4 = Mutations(list_of_latent_vectors, number_of_new=6)
+    list_fused_latent_vectors = test_unitary4.fusion()
 
 
 
@@ -101,7 +102,9 @@ if __name__ == "__main__":
 
 	# Generate the fused image
     image_tensor_fused = engine.generate(list_fused_latent_vectors[0], request) # this is for the first fused vector
+    print(list_fused_latent_vectors[0])
     fused_image_array = image_tensor_fused.squeeze(0).permute(1, 2, 0).cpu().numpy()
+    print(image_tensor_fused)
 
     stored_image_array.append(stored_image_array1)
     stored_image_array.append(stored_image_array2)
@@ -118,9 +121,24 @@ if __name__ == "__main__":
         plt.imsave(f"fusion_image{i}.png", rotated_image)
         #axes[i].imshow(stored_image_array[i])
         #axes[i].axis('off')
-        #plt.show()"""
+        #plt.show()
+           
+    with open("images_selected.json", "r", encoding="utf-8") as fichier_json:
+        selected_images_dict = json.load(fichier_json)
+    list_selected_tensor = []
+    print("ok")
+    for i in selected_images_dict["selected_image"]:
+        image_number = i[5]
+        selected_tensor = torch.load(f"generate_images/latent{image_number}.pth")
+        list_selected_tensor.append(selected_tensor)
+    test_unitary4 = Mutations(list_selected_tensor, number_of_new=6)
+    list_fused_latent_vectors = test_unitary4.fusion()
+    print(list_fused_latent_vectors)
+    gen = ImageGenerator()
+    gen.generate_all(latent_tensors=list_fused_latent_vectors)
+        
 
-"""    # Initialize the Inference Engine
+    # Initialize the Inference Engine
     engine = InferenceEngine()
 
 
