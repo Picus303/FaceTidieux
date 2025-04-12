@@ -11,7 +11,7 @@ import os
 import random
 import json
 
-chemin_relatif = f"images"
+chemin_relatif = f"generate_images"
 chemin_absolu = os.path.abspath(chemin_relatif)
 IMAGE_DIR = chemin_absolu
 #IMAGE_DIR = "generate_images"  # Dossier local contenant les portraits (PNG, JPG, JPEG)
