@@ -63,28 +63,32 @@ def filters_view(page: ft.Page):
 
     # -- Fonction appelée quand l'utilisateur clique sur "Confirm choices"
     def confirm_choices(e):
-        filters_dict = {
-            "Hair_Color": hair_color_dropdown.value,
-            "Sideburns": sideburns_dropdown.value,
-            "Bangs": bangs_dropdown.value,
-            "No_Beard": no_beard_dropdown.value,
-            "Wearing_Necktie": wearing_necktie_dropdown.value,
-            "Big_Lips": big_lips_dropdown.value,
-            "Wearing_Lipstick": wearing_lipstick_dropdown.value,
-            "Straight_Hair": straight_hair_dropdown.value,
-            "Chubby": chubby_dropdown.value,
-            "Big_Nose": big_nose_dropdown.value,
-            "Pointy_Nose": pointy_nose_dropdown.value,
-            "Goatee": goatee_dropdown.value,
-            "Male": male_dropdown.value,
-            "Receding_Hairline": receding_hairline_dropdown.value,
-            "Wearing_Necklace": wearing_necklace_dropdown.value,
-            "Eyeglasses": eyeglasses_dropdown.value,
-            "Wavy_Hair": wavy_hair_dropdown.value,
-            "Wearing_Earrings": wearing_earrings_dropdown.value,
-            "Young": young_dropdown.value
+        dropdowns = {
+            "Hair_Color": hair_color_dropdown,
+            "Sideburns": sideburns_dropdown,
+            "Bangs": bangs_dropdown,
+            "No_Beard": no_beard_dropdown,
+            "Wearing_Necktie": wearing_necktie_dropdown,
+            "Big_Lips": big_lips_dropdown,
+            "Wearing_Lipstick": wearing_lipstick_dropdown,
+            "Straight_Hair": straight_hair_dropdown,
+            "Chubby": chubby_dropdown,
+            "Big_Nose": big_nose_dropdown,
+            "Pointy_Nose": pointy_nose_dropdown,
+            "Goatee": goatee_dropdown,
+            "Male": male_dropdown,
+            "Receding_Hairline": receding_hairline_dropdown,
+            "Wearing_Necklace": wearing_necklace_dropdown,
+            "Eyeglasses": eyeglasses_dropdown,
+            "Wavy_Hair": wavy_hair_dropdown,
+            "Wearing_Earrings": wearing_earrings_dropdown,
+            "Young": young_dropdown
         }
-
+        
+        filters_dict = {
+            key: dropdown.value if dropdown.value is not None else "Unknown"
+            for key, dropdown in dropdowns.items()
+        }
         with open("interface_graphique/filtres.json", "w", encoding="utf-8") as fichier_json:
             json.dump(filters_dict, fichier_json, ensure_ascii=False, indent=4)
 
