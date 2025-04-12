@@ -1,5 +1,6 @@
 import flet as ft
 import asyncio
+import os
 
 from PIL import Image
 from .tuto_page import *
@@ -55,16 +56,26 @@ def accueil_view(page):
 )
 
     # IMAGES superposées
+    
+    # Récupération des chemins absolus pour accéder aux images 
+    liste_chemins_absolus = []
+    for i in range(3):
+        chemin_relatif = f"interface_graphique/im{i+1}.png"
+        chemin_absolu = os.path.abspath(chemin_relatif)
+        liste_chemins_absolus.append(chemin_absolu)
+    print(liste_chemins_absolus)
+        
+    # IMAGES superposées
     img_stack = ft.Stack([
     # Image 3 : tout au fond, la plus grande
-    ft.Image(src="interface_graphique/im3.png", width=510, top=10, left=25 ,bottom = 3),
+    ft.Image(src=liste_chemins_absolus[2], width=510, top=10, left=25 ,bottom = 3),
 
 
     # Image 2 : par-dessus, centrée
-    ft.Image(src="interface_graphique/im1.png", width=500, top=3, left=15,bottom = 50),
+    ft.Image(src=liste_chemins_absolus[0], width=500, top=3, left=15,bottom = 50),
 
     # Image 1 : légèrement décalée
-    ft.Image(src="interface_graphique/im2.png",  width=480, top=11, left=10, bottom =0),
+    ft.Image(src=liste_chemins_absolus[1],  width=480, top=11, left=10, bottom =0),
 
 ], width=470, height=290)
 
