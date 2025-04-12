@@ -11,7 +11,8 @@ import os
 import random
 import json
 
-IMAGE_DIR = "generate_images"  # Dossier local contenant les portraits (PNG, JPG, JPEG)
+chemin_relatif = "generate_images"
+IMAGE_DIR = os.path.abspath(chemin_relatif)  # Dossier local contenant les portraits (PNG, JPG, JPEG)
 
 def get_random_images():
     """Récupère 6 images aléatoires (ou moins si le dossier n'en contient pas assez)."""

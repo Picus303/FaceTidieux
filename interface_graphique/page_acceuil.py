@@ -63,7 +63,6 @@ def accueil_view(page):
         chemin_relatif = f"interface_graphique/im{i+1}.png"
         chemin_absolu = os.path.abspath(chemin_relatif)
         liste_chemins_absolus.append(chemin_absolu)
-    print(liste_chemins_absolus)
         
     # IMAGES superposées
     img_stack = ft.Stack([
