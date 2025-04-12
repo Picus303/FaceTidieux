@@ -22,7 +22,7 @@ def accueil_view(page):
             content=ft.Text("Tutorial", font_family=font_family, size=14, weight=ft.FontWeight.BOLD),
             on_click=open_tutorial
         )
-    ], alignment="end")
+    ], alignment="start")
 
     # ft.TextButton(content=ft.Text("Tutorial",font_family="Times New Roman",size=16, weight=ft.FontWeight.BOLD, decoration=ft.TextDecoration.UNDERLINE
     #     ),
@@ -78,11 +78,7 @@ def accueil_view(page):
 
 ], width=470, height=290)
 
-    # img_stack = ft.Stack([
-    #     ft.Image(src="/Users/ouijdanejerid/Desktop/im1.png", width=430, top=0, left=30),
-    #     ft.Image(src="/Users/ouijdanejerid/Desktop/im2.png", width=420, top=20, left=0),
-    # ], width=430, height=230)
-
+    
     # ORGANISATION horizontale : texte + images
     content = ft.Row([
         ft.Column([
