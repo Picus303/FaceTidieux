@@ -24,10 +24,6 @@ def accueil_view(page):
         )
     ], alignment="start")
 
-    # ft.TextButton(content=ft.Text("Tutorial",font_family="Times New Roman",size=16, weight=ft.FontWeight.BOLD, decoration=ft.TextDecoration.UNDERLINE
-    #     ),
-    #     on_click=lambda e: ft.app_async(target=tuto_page.tutorial_window)
-    #  ) ], alignment="start")
 
     # TITRE et SOUS-TITRE
     title = ft.Text("Welcome to FaceGen !", size=30, weight=ft.FontWeight.BOLD, text_align="center", color="black", font_family=font_family)

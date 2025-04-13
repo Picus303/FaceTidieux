@@ -45,17 +45,10 @@ def selected_result_view(page: ft.Page):
         font_family=font_family
     )
 
-    # Action merge
-    def merge_portraits(e):
-        # À remplacer par ta vraie logique de fusion
-        print("Fusion des portraits...")
-        page.snack_bar = ft.SnackBar(ft.Text("Merging portraits... (to implement)"))
-        page.snack_bar.open = True
-        page.update()
 
     # Action mutate
     def mutate_portraits(e):
-        # À remplacer par ta vraie logique de mutation
+
         print("Mutation des portraits...")
         page.snack_bar = ft.SnackBar(ft.Text("Mutating portraits... (to implement)"))
         pipeline = LatentFusionPipeline(n_outputs=6)
@@ -63,26 +56,12 @@ def selected_result_view(page: ft.Page):
         page.snack_bar.open = True
         page.update()
 
+    ft.ElevatedButton("Mutate", on_click=mutate_portraits)
     action_buttons = ft.Column(
     [
         ft.Container(
             content=ft.TextButton(
-                "Merge portraits",
-                on_click=merge_portraits,
-                style=ft.ButtonStyle(
-                    padding=20,
-                    bgcolor="#1C8EBB",
-                    color="white",
-                    shape=ft.RoundedRectangleBorder(radius=12),
-                    text_style=ft.TextStyle(size=18, weight=ft.FontWeight.BOLD)
-                )
-            ),
-            alignment=ft.alignment.center,
-            width=300
-        ),
-        ft.Container(
-            content=ft.TextButton(
-                "Mutate portraits",
+                "Mutate",
                 on_click=mutate_portraits,
                 style=ft.ButtonStyle(
                     padding=20,
