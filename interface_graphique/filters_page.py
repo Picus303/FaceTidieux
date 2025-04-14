@@ -28,27 +28,27 @@ def filters_view(page: ft.Page):
             ft.dropdown.Option("Blond"),
             ft.dropdown.Option("Unknown")
         ],
-        width=250
+        width=200
     )
 
-    sideburns_dropdown = ft.Dropdown(label="Sideburns", hint_text="choose", options=binary_options, width=250)
-    bangs_dropdown = ft.Dropdown(label="Bangs", hint_text="choose", options=binary_options, width=250)
-    no_beard_dropdown = ft.Dropdown(label="No Beard", hint_text="choose", options=binary_options, width=250)
-    wearing_necktie_dropdown = ft.Dropdown(label="Wearing Necktie", hint_text="choose", options=binary_options, width=250)
-    big_lips_dropdown = ft.Dropdown(label="Big Lips", hint_text="choose", options=binary_options, width=250)
-    wearing_lipstick_dropdown = ft.Dropdown(label="Wearing Lipstick", hint_text="choose", options=binary_options, width=250)
-    straight_hair_dropdown = ft.Dropdown(label="Straight Hair", hint_text="choose", options=binary_options, width=250)
-    chubby_dropdown = ft.Dropdown(label="Chubby", hint_text="choose", options=binary_options, width=250)
-    big_nose_dropdown = ft.Dropdown(label="Big Nose", hint_text="choose", options=binary_options, width=250)
-    pointy_nose_dropdown = ft.Dropdown(label="Pointy Nose", hint_text="choose", options=binary_options, width=250)
-    goatee_dropdown = ft.Dropdown(label="Goatee", hint_text="choose", options=binary_options, width=250)
-    male_dropdown = ft.Dropdown(label="Male", hint_text="choose", options=binary_options, width=250)
-    receding_hairline_dropdown = ft.Dropdown(label="Receding Hairline", hint_text="choose", options=binary_options, width=250)
-    wearing_necklace_dropdown = ft.Dropdown(label="Wearing Necklace", hint_text="choose", options=binary_options, width=250)
-    eyeglasses_dropdown = ft.Dropdown(label="Eyeglasses", hint_text="choose", options=binary_options, width=250)
-    wavy_hair_dropdown = ft.Dropdown(label="Wavy Hair", hint_text="choose", options=binary_options, width=250)
-    wearing_earrings_dropdown = ft.Dropdown(label="Wearing Earrings", hint_text="choose", options=binary_options, width=250)
-    young_dropdown = ft.Dropdown(label="Young", hint_text="choose", options=binary_options, width=250)
+    sideburns_dropdown = ft.Dropdown(label="Sideburns", hint_text="choose", options=binary_options, width=200)
+    bangs_dropdown = ft.Dropdown(label="Bangs", hint_text="choose", options=binary_options, width=200)
+    no_beard_dropdown = ft.Dropdown(label="No Beard", hint_text="choose", options=binary_options, width=200)
+    wearing_necktie_dropdown = ft.Dropdown(label="Wearing Necktie", hint_text="choose", options=binary_options, width=200)
+    big_lips_dropdown = ft.Dropdown(label="Big Lips", hint_text="choose", options=binary_options, width=200)
+    wearing_lipstick_dropdown = ft.Dropdown(label="Wearing Lipstick", hint_text="choose", options=binary_options, width=200)
+    straight_hair_dropdown = ft.Dropdown(label="Straight Hair", hint_text="choose", options=binary_options, width=200)
+    chubby_dropdown = ft.Dropdown(label="Chubby", hint_text="choose", options=binary_options, width=200)
+    big_nose_dropdown = ft.Dropdown(label="Big Nose", hint_text="choose", options=binary_options, width=200)
+    pointy_nose_dropdown = ft.Dropdown(label="Pointy Nose", hint_text="choose", options=binary_options, width=200)
+    goatee_dropdown = ft.Dropdown(label="Goatee", hint_text="choose", options=binary_options, width=200)
+    male_dropdown = ft.Dropdown(label="Male", hint_text="choose", options=binary_options, width=200)
+    receding_hairline_dropdown = ft.Dropdown(label="Receding Hairline", hint_text="choose", options=binary_options, width=200)
+    wearing_necklace_dropdown = ft.Dropdown(label="Wearing Necklace", hint_text="choose", options=binary_options, width=200)
+    eyeglasses_dropdown = ft.Dropdown(label="Eyeglasses", hint_text="choose", options=binary_options, width=200)
+    wavy_hair_dropdown = ft.Dropdown(label="Wavy Hair", hint_text="choose", options=binary_options, width=200)
+    wearing_earrings_dropdown = ft.Dropdown(label="Wearing Earrings", hint_text="choose", options=binary_options, width=200)
+    young_dropdown = ft.Dropdown(label="Young", hint_text="choose", options=binary_options, width=200)
 
     # -- Fonction appelée quand l'utilisateur clique sur "Confirm choices"
     def confirm_choices(e):

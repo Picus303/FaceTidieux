@@ -11,6 +11,7 @@ from .tuto_page import *
 from .filters_page import *
 from .selection_page import *
 from .options_page import *
+from .mutation_page import *
 import flet as ft
 
 
@@ -34,6 +35,8 @@ async def main(page: ft.Page):
             page.views.append(select_portraits_view(page))
         elif page.route == "/selected":
             page.views.append(selected_result_view(page))
+        elif page.route == "/mutate":
+            page.views.append(mutated_selection_view(page))
 
         else:
             page.views.append(ft.View(page.route, controls=[ft.Text("Page not found")]))

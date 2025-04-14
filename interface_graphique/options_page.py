@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 # -*- coding: utf-8 -*-
 """
 Created on Sat Apr 12 10:27:03 2025
@@ -10,6 +10,7 @@ import flet as ft
 import json
 import os 
 from .selection_page import *
+import time
 from interactions.generator_fusion_images import LatentFusionPipeline
 
 def selected_result_view(page: ft.Page):
@@ -38,51 +39,63 @@ def selected_result_view(page: ft.Page):
         spacing=10
     )
 
-    title = ft.Text(
-        "Choose an option for your selected portraits",
-        size=24,
-        weight=ft.FontWeight.BOLD,
-        font_family=font_family
+    mutated_images_container = ft.Column(spacing=10)
+
+    # Ce bouton "Continue" ne s'affichera qu'après mutation
+    continue_button = ft.ElevatedButton(
+        text="Continue",
+        visible=False,
+        on_click=lambda e: page.go("/select")
     )
-
-
-    # Action mutate
-    def mutate_portraits(e):
-
+    
+    def regenerate_images():
         pipeline = LatentFusionPipeline(n_outputs=6)
-        pipeline.run()
-        #page.snack_bar.open = True
-        #page.update()
+        pipeline.run() 
+        
+        
 
-    ft.ElevatedButton("Mutate", on_click=mutate_portraits)
+    def on_mutate(e):
+            regenerate_images()
+            page.go("/mutate")
+            
     action_buttons = ft.Column(
-    [
-        ft.Container(
-            content=ft.TextButton(
-                "Mutate",
-                on_click=mutate_portraits,
-                style=ft.ButtonStyle(
-                    padding=20,
-                    bgcolor="#4CAF50",
-                    color="white",
-                    shape=ft.RoundedRectangleBorder(radius=12),
-                    text_style=ft.TextStyle(size=18, weight=ft.FontWeight.BOLD)
-                )
-            ),
-            alignment=ft.alignment.center,
-            width=300
-        ),
-        ft.FilledButton("Go Back", on_click=lambda e: page.go("/select"))
-    ],
-    spacing=25,
-    alignment="center"
-)
+            [
+                ft.Container(
+                    content=ft.TextButton(
+                        "Mutate",
+                        on_click=on_mutate,
+                        style=ft.ButtonStyle(
+                            padding=20,
+                            bgcolor="#4CAF50",
+                            color="white",
+                            shape=ft.RoundedRectangleBorder(radius=12),
+                            text_style=ft.TextStyle(size=18, weight=ft.FontWeight.BOLD)
+                        )
+                    ),
+                    alignment=ft.alignment.center,
+                    width=300
+                ),
+                ft.FilledButton("Go Back", on_click=lambda e: page.go("/select"))
+            ],
+            spacing=25,
+            alignment="center"
+        )
 
     layout = ft.Column(
         [
-            ft.Container(title, alignment=ft.alignment.center, padding=20),
+            ft.Container(
+                ft.Text(
+                    "Choose an option for your selected portraits",
+                    size=24,
+                    weight=ft.FontWeight.BOLD,
+                    font_family=font_family
+                ),
+                alignment=ft.alignment.center,
+                padding=20
+            ),
             image_row,
-            ft.Container(action_buttons, alignment=ft.alignment.center, padding=20)
+            ft.Container(action_buttons, alignment=ft.alignment.center, padding=20),
+            mutated_images_container
         ],
         horizontal_alignment="center",
         spacing=30
