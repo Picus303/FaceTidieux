@@ -8,20 +8,9 @@ from interactions.generator_images import ImageGenerator
 def filters_view(page: ft.Page):
     font_family = "Times New Roman"
 
-    # -- Titre et sous-titre
+    # -- Titre 
     title = ft.Text("Build profil", size=28, weight=ft.FontWeight.BOLD, text_align="center", font_family=font_family)
-    subtitle = ft.Text(
-        "You can ",
-        spans=[
-            ft.TextSpan(
-                "Skip this Step",
-                on_click=lambda e: page.go("/select"),
-                style=ft.TextStyle(color="#1C8EBB", italic=True, decoration="underline")
-            )
-        ],
-        text_align="center",
-        size=16
-    )
+
 
 # -- Dropdowns compatibles avec l'autoencodeur
     binary_options = [
@@ -135,7 +124,6 @@ def filters_view(page: ft.Page):
     # -- Mise en page finale
     layout = ft.Column([
         title,
-        subtitle,
         ft.Row([col_left,col_center, col_right], alignment="center", spacing=60),
         ft.Container(button_row, alignment=ft.alignment.center, padding=20)
     ], horizontal_alignment="center", spacing=20)

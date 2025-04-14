@@ -49,12 +49,10 @@ def selected_result_view(page: ft.Page):
     # Action mutate
     def mutate_portraits(e):
 
-        print("Mutation des portraits...")
-        page.snack_bar = ft.SnackBar(ft.Text("Mutating portraits... (to implement)"))
         pipeline = LatentFusionPipeline(n_outputs=6)
         pipeline.run()
-        page.snack_bar.open = True
-        page.update()
+        #page.snack_bar.open = True
+        #page.update()
 
     ft.ElevatedButton("Mutate", on_click=mutate_portraits)
     action_buttons = ft.Column(
