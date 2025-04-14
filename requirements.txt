@@ -1,3 +1,5 @@
 torch
 matplotlib
 pydantic
+Pillow 
+Flet 
