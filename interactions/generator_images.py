@@ -25,9 +25,40 @@ class ImageGenerator:
         # Dossier de sortie
         self.output_dir = Path(__file__).parent / ".." / "generate_images"
         self.output_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Fichier de version
+        self.version_file = self.output_dir / "version.txt"
+        self.version = self._load_and_increment_version()
+        self._clean_previous_images()
 
         # Nombre d'images à générer
         self.n_images = 6
+    
+    def _load_and_increment_version(self):
+        if self.version_file.exists():
+            with open(self.version_file, "r") as f:
+                version = int(f.read().strip())
+        else:
+            version = 0  # première exécution
+            
+         # Sauvegarde de la nouvelle version
+        with open(self.version_file, "w") as f:
+            f.write(str(version + 1))
+            
+        return version
+    
+    def _clean_previous_images(self):
+        previous_version = self.version - 1
+        if previous_version < 0:
+            return  # Aucune image précédente à supprimer
+
+        pattern = f"image*_{previous_version}.png"
+        for file_path in self.output_dir.glob(pattern):
+            try:
+                file_path.unlink()
+                print(f"[INFO] Image supprimée : {file_path.name}")
+            except Exception as e:
+                print(f"[ERREUR] Impossible de supprimer {file_path.name} : {e}")
 
     def load_filters(self):
         with open(self.json_path, "r", encoding="utf-8") as f:
@@ -78,4 +109,4 @@ class ImageGenerator:
             # Conversion en image PNG
             image_array = image_tensor.squeeze(0).permute(1, 2, 0).cpu().numpy()
             rotated_image = np.rot90(image_array, k=-1)
-            plt.imsave(self.output_dir / f"image{i}.png", rotated_image)
+            plt.imsave(self.output_dir / f"image{i}_{self.version}.png", rotated_image)
