@@ -2,6 +2,7 @@ import os
 import shutil
 import flet as ft
 from interactions.generator_fusion_images import LatentFusionPipeline
+from pathlib import Path
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 GENERATED_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "generate_images"))
@@ -21,7 +22,7 @@ def get_next_mutation_folder(base="mutated_images"):
 def regenerate_and_store_mutation():
     pipeline = LatentFusionPipeline(n_outputs=6)
     pipeline.run()
-
+    """
     target_dir = get_next_mutation_folder()
 
     for f in os.listdir(GENERATED_DIR):
@@ -31,7 +32,7 @@ def regenerate_and_store_mutation():
                 os.path.join(target_dir, f)
             )
 
-    return target_dir
+    return target_dir"""
 
 def mutated_selection_view(page: ft.Page):
     global current_mutation_dir
@@ -85,6 +86,7 @@ def mutated_selection_view(page: ft.Page):
     def on_mutate_again(e):
         global current_mutation_dir
         current_mutation_dir = regenerate_and_store_mutation()
+        current_mutation_dir = Path(__file__).parent / ".." / "generate_images"
         load_mutated_images(current_mutation_dir)
 
     def on_go_back(e):
@@ -104,6 +106,7 @@ def mutated_selection_view(page: ft.Page):
             page.launch_url(f"file://{img['path']}")
 
     current_mutation_dir = regenerate_and_store_mutation()
+    current_mutation_dir = Path(__file__).parent / ".." / "generate_images"
     load_mutated_images(current_mutation_dir)
 
 
