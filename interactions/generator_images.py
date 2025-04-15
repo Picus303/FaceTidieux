@@ -62,52 +62,53 @@ class ImageGenerator:
 
         Returns
         -------
-        None
+        TYPE
+            DESCRIPTION.
 
         """
         
         previous_version = self.version - 1
-        if previous_version >= 0:
+        if previous_version < 0:
+            return  # Aucune image précédente à supprimer
 
-            pattern = f"image*_{previous_version}.png"
-            for file_path in self.output_dir.glob(pattern):
-                try:
-                    file_path.unlink()
-                    print(f"[INFO] Image supprimée : {file_path.name}")
-                except Exception as e:
-                    print(f"[ERREUR] Impossible de supprimer {file_path.name} : {e}")
+        pattern = f"image*_{previous_version}.png"
+        for file_path in self.output_dir.glob(pattern):
+            try:
+                file_path.unlink()
+                print(f"[INFO] Image supprimée : {file_path.name}")
+            except Exception as e:
+                print(f"[ERREUR] Impossible de supprimer {file_path.name} : {e}")
 
     def load_filters(self):
         """
+        
         Load the filters chosen by the user
 
         Returns
         -------
         Dictionary
-            Filters chosen.
+            Dictionary with filters chosen.
 
         """
-        
         
         with open(self.json_path, "r", encoding="utf-8") as f:
             return json.load(f)
 
     def generate_all(self, latent_tensors=None):
         """
-        Generate 6 images based on the filters chosen and the latents and save them and their latent vectors
+        
+        Generates 6 new images based on latents and save them
 
         Parameters
         ----------
-        latent_tensors : tensor, optional
-            Latent used to create new images. The default is None.
+        latent_tensors : , tensors, optional
+            Latent tensors that will create the new images. The default is None.
 
         Returns
         -------
         None.
 
         """
-        
-        
         
         with open(self.json_path, "r", encoding="utf-8") as f:
             filters_dict = json.load(f)
