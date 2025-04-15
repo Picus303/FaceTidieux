@@ -7,7 +7,6 @@ from pathlib import Path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 GENERATED_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "generate_images"))
 
-current_mutation_dir = None
 displayed_images = []
 
 def get_next_mutation_folder(base="mutated_images"):
@@ -22,20 +21,9 @@ def get_next_mutation_folder(base="mutated_images"):
 def regenerate_and_store_mutation():
     pipeline = LatentFusionPipeline(n_outputs=6)
     pipeline.run()
-    """
-    target_dir = get_next_mutation_folder()
-
-    for f in os.listdir(GENERATED_DIR):
-        if f.lower().endswith((".png", ".jpg", ".jpeg")):
-            shutil.copy2(
-                os.path.join(GENERATED_DIR, f),
-                os.path.join(target_dir, f)
-            )
-
-    return target_dir"""
 
 def mutated_selection_view(page: ft.Page):
-    global current_mutation_dir
+    #global current_mutation_dir
     image_container = ft.Row(wrap=True, alignment="center", spacing=10)
 
     dropdown_visible = False
@@ -84,8 +72,7 @@ def mutated_selection_view(page: ft.Page):
         page.update()
 
     def on_mutate_again(e):
-        global current_mutation_dir
-        current_mutation_dir = regenerate_and_store_mutation()
+        regenerate_and_store_mutation()
         current_mutation_dir = Path(__file__).parent / ".." / "generate_images"
         load_mutated_images(current_mutation_dir)
 
@@ -105,7 +92,7 @@ def mutated_selection_view(page: ft.Page):
         if img:
             page.launch_url(f"file://{img['path']}")
 
-    current_mutation_dir = regenerate_and_store_mutation()
+    regenerate_and_store_mutation()
     current_mutation_dir = Path(__file__).parent / ".." / "generate_images"
     load_mutated_images(current_mutation_dir)
 

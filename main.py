@@ -21,7 +21,7 @@ if __name__ == "__main__":
     
     asyncio.run(ft.app_async(target=main))
     
-    dossier = Path("chemin/vers/ton_dossier")
+    dossier = Path("generate_images")
     if dossier.exists() and dossier.is_dir():
         shutil.rmtree(dossier)
     
