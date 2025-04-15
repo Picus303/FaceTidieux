@@ -208,4 +208,4 @@ def mutated_selection_view(page: ft.Page):
         horizontal_alignment="center"
     )
     
-    return ft.View(route="/mutate", controls=[layout], bgcolor="white")
+    return ft.View(route="/mutate", controls=[layout], scroll="auto", bgcolor="white")
