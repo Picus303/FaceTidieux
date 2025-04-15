@@ -32,7 +32,7 @@ async def main(page: ft.Page):
             page.views.append(filters_view(page))
         elif page.route == "/select":
             page.views.clear()
-            page.views.append(select_portraits_view(page))
+            page.views.append(select_view(page))
         elif page.route == "/selected":
             page.views.append(selected_result_view(page))
         elif page.route == "/mutate":
