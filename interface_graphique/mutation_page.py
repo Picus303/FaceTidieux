@@ -22,6 +22,7 @@ def regenerate_and_store_mutation():
     pipeline = LatentFusionPipeline(n_outputs=6)
     pipeline.run()
 
+
 def mutated_selection_view(page: ft.Page):
     #global current_mutation_dir
     image_container = ft.Row(wrap=True, alignment="center", spacing=10)
@@ -99,36 +100,6 @@ def mutated_selection_view(page: ft.Page):
 
 
 
-
-
-
-
-
-    # def styled_blue_button(text, on_click, small=False, width=None):
-    #     return ft.FilledButton(
-    #         content=ft.Text(
-    #             text,
-    #             size=14 if small else 16,
-    #             weight=ft.FontWeight.BOLD,
-    #             color="white"
-    #         ),
-    #         on_click=on_click,
-    #         style=ft.ButtonStyle(
-    #             bgcolor="#3B5B85",
-    #             shape=ft.RoundedRectangleBorder(radius=30),
-    #             padding=ft.padding.symmetric(horizontal=20, vertical=10 if small else 16),
-    #             overlay_color=ft.colors.with_opacity(0.1, "white")
-    #         ),
-    #         width=width
-    #     )
-        
-
-    # mutate_button = styled_blue_button("Mutate Again", on_mutate_again, width=300)
-    # toggle_dropdown_button = styled_blue_button("Select one portrait to download", show_dropdown)
-    # go_back_button = styled_blue_button("Go Back", on_go_back, small=True)
-    # download_button = styled_blue_button("Download", on_download, small=True)
-    
-    # Mutate Again (vert stylé)
 # --- Dropdown + download section ---
     selected_file = ft.Dropdown(label="Choose an image", options=[], width=250)
     selected_file.on_change = on_dropdown_change  # Tu dois avoir cette fonction définie
