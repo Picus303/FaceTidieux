@@ -1,24 +1,29 @@
-import torch
-import matplotlib.pyplot as plt
-import json
+#import torch
+#import matplotlib.pyplot as plt
+#import json
 #import os
-import numpy as np
+#import numpy as np
 from pathlib import Path
 import asyncio
 import flet as ft
+import shutil
 
-from cnn_backend import InferenceEngine
-from cnn_backend.utils import CNNRequest
+#from cnn_backend import InferenceEngine
+#from cnn_backend.utils import CNNRequest
 from interface_graphique.main import main
-from interactions.generator_images import ImageGenerator
+#from interactions.generator_images import ImageGenerator
 
 
-from algo_gene.genetic_operations import Mutations
+#from algo_gene.genetic_operations import Mutations
 
 
 if __name__ == "__main__":
     
     asyncio.run(ft.app_async(target=main))
+    
+    dossier = Path("chemin/vers/ton_dossier")
+    if dossier.exists() and dossier.is_dir():
+        shutil.rmtree(dossier)
     
     """
     generator = ImageGenerator()
