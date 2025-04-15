@@ -35,6 +35,15 @@ class ImageGenerator:
         self.n_images = 6
     
     def _load_and_increment_version(self):
+        """
+         Increment the version by 1 and save it in a file
+
+        Returns
+        -------
+        version : integer
+            Numero of version.
+
+        """
         if self.version_file.exists():
             with open(self.version_file, "r") as f:
                 version = int(f.read().strip())
@@ -48,23 +57,57 @@ class ImageGenerator:
         return version
     
     def _clean_previous_images(self):
-        previous_version = self.version - 1
-        if previous_version < 0:
-            return  # Aucune image précédente à supprimer
+        """
+        Eliminate the previous images
 
-        pattern = f"image*_{previous_version}.png"
-        for file_path in self.output_dir.glob(pattern):
-            try:
-                file_path.unlink()
-                print(f"[INFO] Image supprimée : {file_path.name}")
-            except Exception as e:
-                print(f"[ERREUR] Impossible de supprimer {file_path.name} : {e}")
+        Returns
+        -------
+        None
+
+        """
+        
+        previous_version = self.version - 1
+        if previous_version >= 0:
+
+            pattern = f"image*_{previous_version}.png"
+            for file_path in self.output_dir.glob(pattern):
+                try:
+                    file_path.unlink()
+                    print(f"[INFO] Image supprimée : {file_path.name}")
+                except Exception as e:
+                    print(f"[ERREUR] Impossible de supprimer {file_path.name} : {e}")
 
     def load_filters(self):
+        """
+        Load the filters chosen by the user
+
+        Returns
+        -------
+        Dictionary
+            Filters chosen.
+
+        """
+        
+        
         with open(self.json_path, "r", encoding="utf-8") as f:
             return json.load(f)
 
     def generate_all(self, latent_tensors=None):
+        """
+        Generate 6 images based on the filters chosen and the latents and save them and their latent vectors
+
+        Parameters
+        ----------
+        latent_tensors : tensor, optional
+            Latent used to create new images. The default is None.
+
+        Returns
+        -------
+        None.
+
+        """
+        
+        
         
         with open(self.json_path, "r", encoding="utf-8") as f:
             filters_dict = json.load(f)
