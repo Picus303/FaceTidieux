@@ -15,11 +15,18 @@ MAX_FEATURE_INDEX = 57
 
 FEATURE_COUNT = 19
 
-MAX_LATENT_ESTIMATORS = 4
+MAX_LATENT_ESTIMATORS = 16
 
 
 class InferenceEngine:
+	"""
+	A class to handle inference operations for the autoencoder model.
+	"""
 	def __init__(self) -> None:
+		"""
+		Initializes the InferenceEngine by setting up the device, loading the model,
+		feature map, latent dictionary, and performing a model warm-up.
+		"""
 		self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 		# Load the Model
@@ -41,6 +48,15 @@ class InferenceEngine:
 
 
 	def build_feature_tensor(self, request: CNNRequest) -> Tensor:
+		"""
+		Builds a feature tensor from the given request.
+
+		Args:
+			request (CNNRequest): A list of feature name-value pairs.
+
+		Returns:
+			Tensor: A tensor representing the features.
+		"""
 		# Build the Feature Tensor
 		feature_tensor = torch.empty((1, FEATURE_COUNT), dtype=torch.int32, device=self.device)
 		for i, feature in enumerate(request):
@@ -51,6 +67,16 @@ class InferenceEngine:
 
 
 	def generate(self, latent_tensor: Tensor, request: CNNRequest) -> Tensor:
+		"""
+		Generates an image based on the given latent tensor and feature request.
+
+		Args:
+			latent_tensor (Tensor): The latent tensor for image generation.
+			request (CNNRequest): A list of feature name-value pairs.
+
+		Returns:
+			Tensor: The generated image tensor.
+		"""
 		# Prepare the input tensors
 		latent_tensor = latent_tensor.to(self.device)
 		feature_tensor = self.build_feature_tensor(request)
@@ -63,6 +89,16 @@ class InferenceEngine:
 
 
 	def generate_latent(self, n_images: int, request: CNNRequest) -> List[Tensor]:
+		"""
+		Generates latent tensors based on the given feature request.
+
+		Args:
+			n_images (int): The number of latent tensors to generate.
+			request (CNNRequest): A list of feature name-value pairs.
+
+		Returns:
+			List[Tensor]: A list of generated latent tensors.
+		"""
 		# Build the Feature Tensor -> Tuple
 		feature_tensor = self.build_feature_tensor(request)
 		feature_tuple = tuple(feature_tensor[0].tolist())
