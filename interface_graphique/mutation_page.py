@@ -9,6 +9,7 @@ GENERATED_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "generate_images"
 
 displayed_images = []
 
+
 def get_next_mutation_folder(base="mutated_images"):
     i = 1
     while True:
@@ -96,14 +97,6 @@ def mutated_selection_view(page: ft.Page):
     current_mutation_dir = Path(__file__).parent / ".." / "generate_images"
     load_mutated_images(current_mutation_dir)
 
-
-
-
-
-
-
-
-
     # def styled_blue_button(text, on_click, small=False, width=None):
     #     return ft.FilledButton(
     #         content=ft.Text(
@@ -121,15 +114,15 @@ def mutated_selection_view(page: ft.Page):
     #         ),
     #         width=width
     #     )
-        
 
     # mutate_button = styled_blue_button("Mutate Again", on_mutate_again, width=300)
     # toggle_dropdown_button = styled_blue_button("Select one portrait to download", show_dropdown)
     # go_back_button = styled_blue_button("Go Back", on_go_back, small=True)
     # download_button = styled_blue_button("Download", on_download, small=True)
-    
+
     # Mutate Again (vert stylé)
-# --- Dropdown + download section ---
+
+    # --- Dropdown + download section ---
     selected_file = ft.Dropdown(label="Choose an image", options=[], width=250)
     selected_file.on_change = on_dropdown_change  # Tu dois avoir cette fonction définie
     

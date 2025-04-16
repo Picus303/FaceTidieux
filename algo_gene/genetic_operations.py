@@ -1,5 +1,5 @@
 import torch
-# The following class will be used to do various operations on the latent_vector
+
 
 class Mutations:
     """
@@ -84,7 +84,6 @@ class Mutations:
         return list_x_new_latent_tensors
 
 
-
     def _multiple_weighted_fusion_x_times(self):
         """
         This function is use to create multiple outputs (multiple latent vectors) base, this time, on multiple latent vectors in input.
@@ -109,10 +108,8 @@ class Mutations:
             for latent_vector in other_latent_vectors:
                 other_latent_vector_weighted = (1-main_weight-noise_weight)/len(other_latent_vectors) * latent_vector
                 latent_vector_i_modified += other_latent_vector_weighted
-            
+
             list_x_new_latent_tensors.append(latent_vector_i_modified)
             print(f" Picture {i} has a major weight coming from latent vector {idx}")
         print(f" There is {len(list_x_new_latent_tensors)} new latent vectors generated.")
         return list_x_new_latent_tensors
-
-    

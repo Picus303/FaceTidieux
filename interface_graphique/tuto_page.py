@@ -19,7 +19,7 @@ async def tutorial_window(page: ft.Page):
     page.window_height = 420
     page.bgcolor = "white"
     page.scroll = "auto"
-          
+
     page.add(
         ft.Column(
             controls=[
@@ -28,14 +28,14 @@ async def tutorial_window(page: ft.Page):
                 ft.Text("FaceGen has a limited number of buttons and features in order to make it simpler for every kind of user. " \
                         "\nBut in case you need some informations about what to do and how to do it, here is the options offered by our tool.",
                         size=14),
-                        
+
                 ft.Container(height=10),
                 ft.Divider(),
                 ft.Container(height=10),
 
                 ft.Text("Step 1:", size=16, weight=ft.FontWeight.BOLD),
                 ft.Text("Click on the start button !", size=14),
-                
+
                 ft.Container(height=10),
                 ft.Text("Step 2:", size=16, weight=ft.FontWeight.BOLD),
                 ft.Text("First, you need to build the profile. There is a lot of parameters but if you don't want to select all of them by hand, you can confirm without specifying the features"
@@ -61,7 +61,6 @@ async def tutorial_window(page: ft.Page):
                 ft.Text("Here is your six brand new generated pictures based on your choices. You have now the possibility to select the ones that fit the most with your initial idea and continue to mutate pictures until you find the perfect match." \
                 " When you find it and you want to save it, you can click on the Select One Portrait to Download button and then select it in the drop-down menu. You can finally click on the download button to get it.", size=14),
 
-
                 ft.Container(height=10),
                 ft.Divider(),
                 ft.Container(height=10),
@@ -77,7 +76,6 @@ async def tutorial_window(page: ft.Page):
             expand=True
         )
     )
-    
-    
+
 async def open_tutorial(e):
     await ft.app_async(target=tutorial_window)

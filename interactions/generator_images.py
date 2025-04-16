@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 from cnn_backend import InferenceEngine
 from cnn_backend.utils import CNNRequest
 
+
 class ImageGenerator:
     def __init__(self):
         # Initialiser l'engine

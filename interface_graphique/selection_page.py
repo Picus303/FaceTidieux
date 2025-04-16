@@ -18,8 +18,6 @@ IMAGE_DIR = chemin_absolu
 #IMAGE_DIR = "generate_images"  # Dossier local contenant les portraits (PNG, JPG, JPEG)
 
 
-
-
 def get_random_images():
     """Récupère 6 images aléatoires (ou moins si le dossier n'en contient pas assez)."""
     all_images = [f for f in os.listdir(IMAGE_DIR) if f.lower().endswith((".png", ".jpg", ".jpeg"))]
@@ -69,6 +67,7 @@ def select_portraits_view(page: ft.Page):
         page.update()
         
         img_info["control"].update()
+
     selected_thumbnails = ft.Column(wrap=True, spacing=5)
     thumbnail_panel = ft.Container(
         content=selected_thumbnails,
@@ -81,33 +80,32 @@ def select_portraits_view(page: ft.Page):
         alignment=ft.alignment.top_left,
         shadow=ft.BoxShadow(blur_radius=10, color=ft.colors.GREY),
     )
-    
+
     toggle_button = ft.IconButton(
         icon=ft.icons.IMAGE,
         tooltip="Show selected",
         on_click=lambda e: toggle_panel()
     )
-    
+
     def toggle_panel():
         thumbnail_panel.visible = not thumbnail_panel.visible
         page.update()
-    
 
     def load_images():
         image_container.controls.clear()
         displayed_images.clear()
-    
+
         random_imgs = get_random_images()
         for img_name in random_imgs:
             img_path = os.path.join(IMAGE_DIR, img_name)
-    
+
             image_control = ft.Image(
                 src=img_path,
                 width=140,
                 height=140,
                 fit=ft.ImageFit.COVER
             )
-    
+
             container = ft.Container(
                 content=image_control,
                 width=150,
@@ -118,16 +116,16 @@ def select_portraits_view(page: ft.Page):
                 animate=ft.Animation(200, "easeInOut"),
                 scale=1,
             )
-    
+
             img_info = {"img_name": img_name, "control": container, "selected": False}
             displayed_images.append(img_info)
-    
+
             gd = ft.GestureDetector(
                 content=container,
                 on_tap=lambda e, img_info=img_info: toggle_selection(e, img_info)
             )
             image_container.controls.append(gd)
-    
+
         page.update()
 
     def other_images(e):
@@ -140,37 +138,37 @@ def select_portraits_view(page: ft.Page):
             page.snack_bar.open = True
             page.update()
             return
-    
+
         with open("images_selected.json", "w", encoding="utf-8") as fichier_json:
             json.dump({"selected_image": thumbnail_selected_images}, fichier_json, ensure_ascii=False, indent=4)
-    
+
         page.go("/selected")
-            
-    
+
+
     def clear_thumbnail(e):
         thumbnail_selected_images.clear()
         selected_thumbnails.controls.clear()
         page.update()
-    
-    
+
+
     title = ft.Text(
         "Select one ore more portraits",
         size=22,
         weight=ft.FontWeight.BOLD,
         font_family=font_family
     )
-    
-    
+
+
     clear_button = ft.IconButton(
-    icon=ft.icons.DELETE,
-    tooltip="Clear selected",
-    on_click=clear_thumbnail
-)
+        icon=ft.icons.DELETE,
+        tooltip="Clear selected",
+        on_click=clear_thumbnail
+    )
 
     page.overlay.append(clear_button)
     clear_button.top = 20
     clear_button.right = 60  # un peu à gauche du bouton image
-        
+
 
     button_row = ft.Row(
         [
@@ -195,11 +193,11 @@ def select_portraits_view(page: ft.Page):
     load_images()
     page.overlay.append(thumbnail_panel)
     page.overlay.append(toggle_button)
-    
+
     # Pour positionner dans le coin haut droit :
     toggle_button.top = 20
     toggle_button.right = 20
     thumbnail_panel.top = 60
     thumbnail_panel.right = 20
-    
+
     return ft.View(route="/select", controls=[layout], scroll="auto", bgcolor="white")

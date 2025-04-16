@@ -44,6 +44,3 @@ async def main(page: ft.Page):
 
     page.on_route_change = route_change
     page.go("/")  # Commencer par la page d’accueil
-
-#import asyncio
-#asyncio.run(ft.app_async(target=main))

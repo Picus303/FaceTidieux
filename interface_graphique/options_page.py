@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 """
 Created on Sat Apr 12 10:27:03 2025
@@ -12,6 +11,7 @@ import os
 from .selection_page import *
 import time
 from interactions.generator_fusion_images import LatentFusionPipeline
+
 
 def selected_result_view(page: ft.Page):
     font_family = "Times New Roman"
