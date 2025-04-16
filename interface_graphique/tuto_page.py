@@ -49,7 +49,7 @@ def tutorial_window(page: ft.Page):
                 ft.Container(height=10),
                 ft.Text("Step 4:", size=16, weight=ft.FontWeight.BOLD),
                 ft.Text("Here is your six brand new generated pictures based on your choices. You have now the possibility to select the ones that fit the most with your initial idea and continue to mutate pictures until you find the perfect match." \
-                " When you find it and you want to save it, click on the bin to clean your history selection and select the picture that you want to download. Then you can click on the Download button.", size=14),
+                        " When you find it and you want to save it, click on the bin to clean your history selection and select the picture that you want to download. Then you can click on the Download button.", size=14),
 
                 ft.Container(height=10),
                 ft.Divider(),
