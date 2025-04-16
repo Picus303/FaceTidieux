@@ -31,6 +31,10 @@ class InferenceEngine:
 		with open(Path(module_path, "feature_map.pkl"), "rb") as file:
 			self.feature_map = pickle.load(file)
 
+		# Load the Latent Dictionary
+		with open(Path(module_path, "latents_dict.pkl"), "rb") as file:
+			self.latents_dict = pickle.load(file)
+
 		# Model Warm-Up
 		latent_tensor = torch.randn((1, 128), device=self.device)
 		label_tensor = torch.randint(MIN_FEATURE_INDEX, MAX_FEATURE_INDEX+1, (1, FEATURE_COUNT), dtype=torch.int32, device=self.device)
@@ -57,19 +61,6 @@ class InferenceEngine:
 			image = self.model.decode(latent_tensor, feature_tensor)
 
 		return image
-	
-
-	def encode(self, image: Tensor, request: CNNRequest) -> Tensor:
-		# Prepare the input tensors
-		image = image.to(self.device)
-		feature_tensor = self.build_feature_tensor(request)
-
-		with torch.no_grad():
-			self.model.eval()
-			mu, logvar = self.model.encode(image, feature_tensor)
-			z = self.model.reparameterize(mu, logvar)
-
-		return z
 
 
 	def generate_latent(self, n_images: int, request: CNNRequest) -> List[Tensor]:
