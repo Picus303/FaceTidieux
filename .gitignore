@@ -171,4 +171,4 @@ cython_debug/
 .pypirc
 
 # JSON files
-.json
+*.json

@@ -15,8 +15,7 @@ MAX_FEATURE_INDEX = 57
 
 FEATURE_COUNT = 19
 
-IMAGE_SHAPE = (3, 180, 216)
-NUM_LATENT_ESTIMATORS = 16
+MAX_LATENT_ESTIMATORS = 4
 
 
 class InferenceEngine:
@@ -64,21 +63,37 @@ class InferenceEngine:
 
 
 	def generate_latent(self, n_images: int, request: CNNRequest) -> List[Tensor]:
-		"""
-		zs = []
+		# Build the Feature Tensor -> Tuple
+		feature_tensor = self.build_feature_tensor(request)
+		feature_tuple = tuple(feature_tensor[0].tolist())
 
-		for _ in range(n_images):
-			# Encode random images
-			images = torch.randn((NUM_LATENT_ESTIMATORS, IMAGE_SHAPE[0], IMAGE_SHAPE[1], IMAGE_SHAPE[2]), dtype=torch.float32, device=self.device)
-			z = self.encode(images, request)
+		# Compare the similarity with the references
+		similarities = {}
+		for ref in self.latents_dict.keys():
+			# We take the two tuples and count the number of similar features
+			similarities[ref] = sum(1 for i in range(FEATURE_COUNT) if feature_tuple[i] == ref[i])
 
-			# Average the latent vectors
-			z = z.mean(dim=0, keepdim=True)
-			zs.append(z)
+		# Sort the similarities and pick the ones with the highest scores
+		sorted_similarities = sorted(similarities.items(), key=lambda item: item[1], reverse=True)
+		top_similarities = sorted_similarities[:MAX_LATENT_ESTIMATORS]
+		top_similarity = top_similarities[0][1]
 
-		return zs
-		"""
+		mu_var_tensors = []
+		for ref, score in top_similarities:
+			if score == top_similarity:
+				mu_var_tensors.append(self.latents_dict[ref])
 
-		zs = []
-		for _ in range(n_images):
-			zs.append(torch.randn((1, 128), dtype=torch.float32, device=self.device))
+		# Compute the average mu and logvar
+		mus = [torch.tensor(pair[0]) for pair in mu_var_tensors]
+		logvars = [torch.tensor(pair[1]) for pair in mu_var_tensors]
+
+		mu = torch.mean(torch.stack(mus), dim=0)
+		logvar = torch.mean(torch.stack(logvars), dim=0)
+
+		# Generate the latent tensors
+		latent_tensors = []
+		for i in range(n_images):
+			z = self.model.reparameterize(mu, logvar)
+			latent_tensors.append(z)
+
+		return latent_tensors
