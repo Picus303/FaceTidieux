@@ -1,6 +1,6 @@
 # FaceGen
 
-Customizable face generator with filter controls and multi-face blending, powered by an autoencoder and a genetic algorithm.
+Customizable face generator with filter controls and multi-face blending, powered by an autoencoder and a genetic algorithm. Don't hesitate to check the tutorial in the left corner to get help.
 
 ## Requirements
 
@@ -10,14 +10,13 @@ Customizable face generator with filter controls and multi-face blending, powere
 ## If you want to use a virtual environnement
 
 1. Venv
-   Venv :
     ```bash
    python3 -m venv venv_FaceGenTool
    source venv_FaceGenTool/bin/activate
 
 2. Conda :
     ```bash
-   conda create -n conda_FaceGenTool python=3.7
+   conda create -n conda_FaceGenTool python=3.12.7
    conda activate conda_FaceGenTool
 
 
