@@ -11,8 +11,7 @@ def filters_view(page: ft.Page):
     # -- Titre 
     title = ft.Text("Build profil", size=28, weight=ft.FontWeight.BOLD, text_align="center", font_family=font_family)
 
-
-# -- Dropdowns compatibles avec l'autoencodeur
+    # -- Dropdowns compatibles avec l'autoencodeur
     binary_options = [
         ft.dropdown.Option("Yes"),
         ft.dropdown.Option("No"),
@@ -73,19 +72,19 @@ def filters_view(page: ft.Page):
             "Wearing_Earrings": wearing_earrings_dropdown,
             "Young": young_dropdown
         }
-        
+
         filters_dict = {
             key: dropdown.value if dropdown.value is not None else "Unknown"
             for key, dropdown in dropdowns.items()
         }
         with open("interface_graphique/filtres.json", "w", encoding="utf-8") as fichier_json:
             json.dump(filters_dict, fichier_json, ensure_ascii=False, indent=4)
+
         generator = ImageGenerator()
-        generator.generate_all()
+        generator.generate_all(first_run=True)
         page.go("/select")
 
-
-    # -- Colonnes (à répartir comme tu préfères)
+    # -- Colonnes
     col_left = ft.Column([
         hair_color_dropdown,
         sideburns_dropdown,
@@ -113,7 +112,6 @@ def filters_view(page: ft.Page):
         wearing_earrings_dropdown,
         young_dropdown
     ], spacing=15)
-
 
     # -- Boutons
     button_row = ft.Row([

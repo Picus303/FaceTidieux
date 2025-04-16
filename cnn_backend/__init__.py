@@ -8,11 +8,15 @@ import torch
 from torch import Tensor
 
 import pickle
+from typing import List
 
 MIN_FEATURE_INDEX = 0
 MAX_FEATURE_INDEX = 57
 
 FEATURE_COUNT = 19
+
+IMAGE_SHAPE = (3, 180, 216)
+NUM_LATENT_ESTIMATORS = 16
 
 
 class InferenceEngine:
@@ -64,3 +68,24 @@ class InferenceEngine:
 			z = self.model.reparameterize(mu, logvar)
 
 		return z
+
+
+	def generate_latent(self, n_images: int, request: CNNRequest) -> List[Tensor]:
+		"""
+		zs = []
+
+		for _ in range(n_images):
+			# Encode random images
+			images = torch.randn((NUM_LATENT_ESTIMATORS, IMAGE_SHAPE[0], IMAGE_SHAPE[1], IMAGE_SHAPE[2]), dtype=torch.float32, device=self.device)
+			z = self.encode(images, request)
+
+			# Average the latent vectors
+			z = z.mean(dim=0, keepdim=True)
+			zs.append(z)
+
+		return zs
+		"""
+
+		zs = []
+		for _ in range(n_images):
+			zs.append(torch.randn((1, 128), dtype=torch.float32, device=self.device))

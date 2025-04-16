@@ -18,6 +18,8 @@ class Mutations:
         self.weight = weight
         self.number_of_new = number_of_new
 
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
     def fusion(self):
         print("\n Next test :")
         if len(self.list_latent_vectors) == 0:
@@ -48,7 +50,7 @@ class Mutations:
             alpha = self.weight
         else:
             alpha = 0.5
-        randn_latent_vector_modifier = torch.randn(1, 128)
+        randn_latent_vector_modifier = torch.randn(1, 128, device=self.device)
 
         latent_tensor_modified = alpha * self.list_latent_vectors[0] + (1 - alpha) * randn_latent_vector_modifier
         list_new_latent_tensor.append(latent_tensor_modified)
@@ -98,7 +100,7 @@ class Mutations:
         for i in range(self.number_of_new):
             idx = i % nb_inputs
             privilege_latent_vector = main_weight * self.list_latent_vectors[idx]
-            randn_latent_vector_modifier = torch.randn(1, 128)
+            randn_latent_vector_modifier = torch.randn(1, 128, device=self.device)
             latent_vector_i_modified = privilege_latent_vector.clone()
             latent_vector_i_modified += noise_weight * randn_latent_vector_modifier
 
