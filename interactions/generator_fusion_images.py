@@ -13,7 +13,7 @@ from interactions.generator_images import ImageGenerator
 
 
 class LatentFusionPipeline:
-    def __init__(self, json_path="images_selected.json", latents_dir="generate_images", n_outputs=6):
+    def __init__(self, json_path="generate_images/images_selected.json", latents_dir="generate_images", n_outputs=6):
         """
 
         Parameters

@@ -186,7 +186,7 @@ def load_images(page,image_container,displayed_images,on_image_click, regenerate
 
 
     
-def save_selected_images(page, thumbnail_selected_images, e):
+def save_selected_images(page, selected_names):
     """
     Sauvegarde les images selectionnees dans une fichier json, puis redirige le user vers la page du resulats de la mutation
 
@@ -194,22 +194,20 @@ def save_selected_images(page, thumbnail_selected_images, e):
     ----------
     page : TYPE
         DESCRIPTION.
-    thumbnail_selected_images : liste de str
+    selected_names : liste de str
         coontient les images selectionnees par le user 
-    e : objet flet.ControlEvent
-        Evenmt declenche lors du clic sur le bouton mutate
-
+    
     Returns
     -------
     None.
 
     """
-    if not thumbnail_selected_images:
+    if not selected_names:
         page.update()
         return
     
-    with open("images_selected.json", "w", encoding="utf-8") as fichier_json:
-        json.dump({"selected_image": thumbnail_selected_images}, fichier_json, ensure_ascii=False, indent=4)
+    with open("generate_images/images_selected.json", "w", encoding="utf-8") as fichier_json:
+        json.dump({"selected_image": selected_names}, fichier_json, ensure_ascii=False, indent=4)
     
     page.go("/selected")
     
@@ -265,7 +263,7 @@ def handle_single_download(image_name, page):
 
     """
     src = Path(IMAGE_DIR) / image_name
-    dst_dir = Path("downloads")
+    dst_dir = Path.home() / "downloads"
     dst_dir.mkdir(exist_ok=True)
     dst = dst_dir / image_name
 
@@ -285,6 +283,7 @@ def handle_mutate_click(page, selected_names, image_container, displayed_images,
         Si une ou plusieurs images sont selection, la fonction load_images esf appelee pour afficher les images mutees
         Sinon un message d'erreur est affiche
     """
+    save_selected_images(page, selected_names)
     if len(selected_names) >= 1:
         load_images(
             page,
@@ -343,7 +342,7 @@ def reset_message(text_widget, page):
 
     """
     text_widget.value = ""
-    text_widget.visible = False
+    text_widget.visible = True
     page.update()
     
 
@@ -432,7 +431,7 @@ def select_view(page: ft.Page):
     clear_button.top = 20
     clear_button.right = 60 
     
-#>>>>>>> d6e2ec9062b3a52c0339a8b39084c0bc9ab1e32f
+
 
     return ft.View(route="/select", controls=[layout], scroll="auto", bgcolor="white")
 
