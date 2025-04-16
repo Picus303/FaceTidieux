@@ -368,8 +368,7 @@ def select_view(page: ft.Page):
                 lambda e, img_info: image_click_state(e, img_info, selected_names, barre_miniatures, page),
                 regenerate=False)
     
-    
-    
+
     title = ft.Text(
         "Select one ore more portraits to mutate",
         size=22,
@@ -386,6 +385,7 @@ def select_view(page: ft.Page):
 
     # Bouton pour vider la sélection
     clear_button = ft.IconButton(icon=ft.icons.DELETE,tooltip="Clear selected",on_click=lambda e: clear_thumbnail(e, selected_names, barre_miniatures, page))
+
 
     # Texte d'information / erreur
     message_text = ft.Text("", color=ft.colors.RED, size=16, visible=False)
@@ -420,7 +420,6 @@ def select_view(page: ft.Page):
     )
 
 
-
     
     # Positionner en haut a droite
     page.overlay.append(barre_miniatures_container)
@@ -433,6 +432,7 @@ def select_view(page: ft.Page):
     clear_button.top = 20
     clear_button.right = 60 
     
+#>>>>>>> d6e2ec9062b3a52c0339a8b39084c0bc9ab1e32f
 
     return ft.View(route="/select", controls=[layout], scroll="auto", bgcolor="white")
 

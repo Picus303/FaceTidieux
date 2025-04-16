@@ -13,7 +13,7 @@ class AdaIN(nn.Module):
         self.fc = nn.Linear(style_dim, num_features*2)
 
     def forward(self, x: Tensor, style: Tensor) -> Tensor:
-        h = self.fc(style)                          # (B, D) -> (B, C*2)
+        h: Tensor = self.fc(style)                  # (B, D) -> (B, C*2)
         gamma, beta = h.chunk(2, dim=1)             # (B, C), (B, C)
 
         gamma = gamma.unsqueeze(-1).unsqueeze(-1)   # (B, C, 1, 1)

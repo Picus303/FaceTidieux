@@ -4,6 +4,7 @@ from .tuto_page import open_tutorial
 
 
 
+
 def accueil_view(page):
     """
     Cree et affiche la page d'accueil du logiciel
@@ -22,7 +23,7 @@ def accueil_view(page):
     
     # Choix de la police d'ecriture
     font_family = "Times New Roman"
-    
+
     # TITRE et SOUS-TITRE
     title = ft.Text("Welcome to FaceGen !", size=30, weight=ft.FontWeight.BOLD, text_align="center", color="black", font_family=font_family)
     subtitle = ft.Text("An interactive tool to explore, combine and evolve human faces", size=16, text_align="center", color="black", font_family=font_family)
@@ -39,6 +40,7 @@ def accueil_view(page):
     
     # Description globale du fonctionnement du logiciel
     description = ft.Column([
+
     ft.Text("• Start by applying filters (optional) to narrow down the portraits.", italic=True, color="black", font_family=font_family, size=15),
     ft.Text("• Then select one or more portraits from the filtered results.", italic=True, color="black", font_family=font_family, size=15),
     ft.Text("• With a single portrait, generate multiple variations through mutation.", italic=True, color="black", font_family=font_family, size=15),
@@ -68,6 +70,7 @@ def accueil_view(page):
         liste_chemins_absolus.append(chemin_absolu)
         
     img_stack = ft.Stack([
+
         ft.Image(src=liste_chemins_absolus[2], width=510, top=10, left=25 ,bottom = 3),
         ft.Image(src=liste_chemins_absolus[0], width=500, top=3, left=15,bottom = 50),
         ft.Image(src=liste_chemins_absolus[1],  width=480, top=11, left=10, bottom =0),
@@ -88,6 +91,7 @@ def accueil_view(page):
     ft.Container(subtitle, alignment=ft.alignment.center, padding=5),
     ft.Divider(thickness=1),
     ft.Container(content, padding=ft.padding.only(top=20)))
+
     controls=[tutoriel,
             ft.Container(title, alignment=ft.alignment.center, padding=0),
             ft.Container(subtitle, alignment=ft.alignment.center, padding=5),

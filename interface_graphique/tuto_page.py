@@ -16,7 +16,7 @@ def tutorial_window(page: ft.Page):
     page.title = "Tutorial"
     page.bgcolor = "white"
     page.scroll = "auto"
-          
+
     page.add(
         ft.Column(
             controls=[
@@ -25,14 +25,14 @@ def tutorial_window(page: ft.Page):
                 ft.Text("FaceGen has a limited number of buttons and features in order to make it simpler for every kind of user. " \
                         "\nBut in case you need some informations about what to do and how to do it, here is the options offered by our tool.",
                         size=14),
-                        
+
                 ft.Container(height=10),
                 ft.Divider(),
                 ft.Container(height=10),
 
                 ft.Text("Step 1:", size=16, weight=ft.FontWeight.BOLD),
                 ft.Text("Click on the start button !", size=14),
-                
+
                 ft.Container(height=10),
                 ft.Text("Step 2:", size=16, weight=ft.FontWeight.BOLD),
                 ft.Text("First, you need to build the profile. There is a lot of parameters but if you don't want to select all of them by hand, you can confirm without specifying the features"
@@ -66,7 +66,7 @@ def tutorial_window(page: ft.Page):
             expand=True
         )
     )
-    
+
 async def open_tutorial(e):
     await ft.app_async(target=tutorial_window)
     

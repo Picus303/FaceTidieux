@@ -64,11 +64,13 @@ def filters_view(page: ft.Page):
     non_binary_attributes = {"Hair_Color": ["Black", "Brown", "Blond", "Unknown"]}
     
     # Options pour les attributs binaires
+
     binary_options = [
         ft.dropdown.Option("Yes"),
         ft.dropdown.Option("No"),
         ft.dropdown.Option("Unknown")
     ]
+
     
     # Creation des dropdowns
     dropdowns = {}
@@ -87,6 +89,7 @@ def filters_view(page: ft.Page):
                             )
         
     # Séparer les dropdowns en trois colonnes
+
     col_left = ft.Column([
         dropdowns["Hair_Color"],
         dropdowns["Sideburns"],
@@ -115,7 +118,9 @@ def filters_view(page: ft.Page):
         dropdowns["Young"],
     ], spacing=15)
 
+
     #Boutons "go back" et "confirm choices"
+
     button_row = ft.Row([
         ft.FilledButton("Go Back", on_click=lambda e: page.go("/")),
         ft.FilledButton("Confirm choices", on_click=lambda e: confirm_choices(e, page, dropdowns))

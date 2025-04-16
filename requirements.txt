@@ -1,5 +1,9 @@
 torch
 matplotlib
 pydantic
-Pillow 
-Flet 
+Pillow
+Flet
+matplotlib
+numpy
+
+

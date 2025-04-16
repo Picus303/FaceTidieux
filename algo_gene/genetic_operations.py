@@ -1,5 +1,5 @@
 import torch
-# The following class will be used to do various operations on the latent_vector
+
 
 class Mutations:
     """
@@ -17,6 +17,8 @@ class Mutations:
         self.list_latent_vectors = list_latent_vectors
         self.weight = weight
         self.number_of_new = number_of_new
+
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     def fusion(self):
         print("\n Next test :")
@@ -48,7 +50,7 @@ class Mutations:
             alpha = self.weight
         else:
             alpha = 0.5
-        randn_latent_vector_modifier = torch.randn(1, 128)
+        randn_latent_vector_modifier = torch.randn(1, 128, device=self.device)
 
         latent_tensor_modified = alpha * self.list_latent_vectors[0] + (1 - alpha) * randn_latent_vector_modifier
         list_new_latent_tensor.append(latent_tensor_modified)
@@ -82,7 +84,6 @@ class Mutations:
         return list_x_new_latent_tensors
 
 
-
     def _multiple_weighted_fusion_x_times(self):
         """
         This function is use to create multiple outputs (multiple latent vectors) base, this time, on multiple latent vectors in input.
@@ -98,7 +99,7 @@ class Mutations:
         for i in range(self.number_of_new):
             idx = i % nb_inputs
             privilege_latent_vector = main_weight * self.list_latent_vectors[idx]
-            randn_latent_vector_modifier = torch.randn(1, 128)
+            randn_latent_vector_modifier = torch.randn(1, 128, device=self.device)
             latent_vector_i_modified = privilege_latent_vector.clone()
             latent_vector_i_modified += noise_weight * randn_latent_vector_modifier
 
@@ -107,10 +108,8 @@ class Mutations:
             for latent_vector in other_latent_vectors:
                 other_latent_vector_weighted = (1-main_weight-noise_weight)/len(other_latent_vectors) * latent_vector
                 latent_vector_i_modified += other_latent_vector_weighted
-            
+
             list_x_new_latent_tensors.append(latent_vector_i_modified)
             print(f" Picture {i} has a major weight coming from latent vector {idx}")
         print(f" There is {len(list_x_new_latent_tensors)} new latent vectors generated.")
         return list_x_new_latent_tensors
-
-    

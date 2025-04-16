@@ -11,6 +11,7 @@ from pathlib import Path
 from algo_gene.genetic_operations import Mutations
 from interactions.generator_images import ImageGenerator
 
+
 class LatentFusionPipeline:
     def __init__(self, json_path="images_selected.json", latents_dir="generate_images", n_outputs=6):
         """
