@@ -44,19 +44,12 @@ def tutorial_window(page: ft.Page):
                 ft.Text("Now you have to select one or more portraits that feat the most with the one you have in mind." \
                         " To do so, you only have to click on it and they will be circled with a blue band, indicating that they are selected." \
                         " If you change your mind, don't worry you still can click again on the picture to deselect it." \
-                        "\nIf not a single picture correspond to the one you wanted you can click on the Other button to generate a new selection of pictures." \
-                        " Don't hesitate to use it because it is easier to start from a picture that feat a minimum with what you have in mind !" \
-                        "\nWhen you have your final selection, you can confirm your choices by clicking on the Confirm Selected Pictures button.", size=14),
+                        "\nWhen you have your final selection, you can confirm your choices and click on the Mutate button.", size=14),
 
                 ft.Container(height=10),
                 ft.Text("Step 4:", size=16, weight=ft.FontWeight.BOLD),
-                ft.Text("You have here a last possibility to change your mind before mutating your selected pictures." \
-                        "\nIf you have made peace with your mind, click on the Mutate button to generate 6 pictures looking like a mix of your selected ones.", size=14),
-
-                ft.Container(height=10),
-                ft.Text("Step 5:", size=16, weight=ft.FontWeight.BOLD),
                 ft.Text("Here is your six brand new generated pictures based on your choices. You have now the possibility to select the ones that fit the most with your initial idea and continue to mutate pictures until you find the perfect match." \
-                " When you find it and you want to save it, you can click on the Select One Portrait to Download button and then select it in the drop-down menu. You can finally click on the download button to get it.", size=14),
+                        " When you find it and you want to save it, click on the bin to clean your history selection and select the picture that you want to download. Then you can click on the Download button.", size=14),
 
                 ft.Container(height=10),
                 ft.Divider(),
