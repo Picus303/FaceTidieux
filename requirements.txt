@@ -1,5 +1,7 @@
 torch
-matplotlib
-pydantic
-Pillow 
+pydantic 
 Flet 
+shutil
+json
+os
+pathlib
