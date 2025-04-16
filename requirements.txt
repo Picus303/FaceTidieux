@@ -1,13 +1,9 @@
 torch
-<<<<<<< HEAD
 matplotlib
 pydantic
 Pillow
 Flet
 matplotlib
 numpy
-shutil
-json
-os
-pathlib
+
 
