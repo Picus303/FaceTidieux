@@ -1,42 +1,52 @@
 import flet as ft
-import asyncio
 import os
+from .tuto_page import open_tutorial
 
-from PIL import Image
-from .tuto_page import *
+
 
 def accueil_view(page):
-    page.title = "FaceGen"
-    page.bgcolor = "white"
-    page.padding = 15
-    page.scroll = "auto"
-
-    # Police personnalisée
+    """
+    Cree et affiche la page d'accueil du logiciel
+    
+    Objts flet utilises :
+	-	ft.Row : pour aligner plusieurs elts cote a cote horizontalement 
+	-	ft.Column : pour aligner plusieurs elts verticalement
+	-	ft.Container : pour positionner les elts avec plusieurs attribut pour ameliorer le design
+	-	ft.Text : pour afficher du texte
+	-	ft.ElevatedButton : Bouton avec une ombre pour le mettre en évidence
+	-	ft.Stack : pour superposer plusieurs images les unes au-dessus des autres
+	-	ft.Divider : une ligne de separation 
+	-	ft.View : represente la page complete
+  
+    """
+    
+    # Choix de la police d'ecriture
     font_family = "Times New Roman"
-
-  # TOP BAR
-    top_bar = ft.Row([
-        ft.TextButton(
-            content=ft.Text("Tutorial", font_family=font_family, size=14, weight=ft.FontWeight.BOLD),
-            on_click=open_tutorial
-        )
-    ], alignment="start")
-
-
+    
     # TITRE et SOUS-TITRE
     title = ft.Text("Welcome to FaceGen !", size=30, weight=ft.FontWeight.BOLD, text_align="center", color="black", font_family=font_family)
     subtitle = ft.Text("An interactive tool to explore, combine and evolve human faces", size=16, text_align="center", color="black", font_family=font_family)
 
-    # DESCRIPTION
+    # Option pour afficher le tutoriel
+    tutoriel = ft.Row([
+        ft.TextButton(
+            content=ft.Text("Tutorial", font_family=font_family, size=14, weight=ft.FontWeight.BOLD),
+            on_click=open_tutorial
+            )
+        ], alignment="start")
+
+
+    
+    # Description globale du fonctionnement du logiciel
     description = ft.Column([
-    ft.Text("• Select one or more base portraits to begin.", italic=True, color="black", font_family="Times New Roman", size=15),
-    ft.Text("• Optionally apply filters to refine the selection.", italic=True, color="black", font_family="Times New Roman", size=15),
-    ft.Text("• With a single portrait, generate multiple variations.", italic=True, color="black", font_family="Times New Roman", size=15),
-    ft.Text("• With multiple portraits, combine them to evolve new faces.", italic=True, color="black", font_family="Times New Roman", size=15),
+    ft.Text("• Start by applying filters (optional) to narrow down the portraits.", italic=True, color="black", font_family=font_family, size=15),
+    ft.Text("• Then select one or more portraits from the filtered results.", italic=True, color="black", font_family=font_family, size=15),
+    ft.Text("• With a single portrait, generate multiple variations through mutation.", italic=True, color="black", font_family=font_family, size=15),
+    ft.Text("• With multiple portraits, combine them to evolve new faces.", italic=True, color="black", font_family=font_family, size=15),
     ], spacing=5, alignment="start")
 
 
-    # BOUTON stylé
+    # Ajout du bouton start qui renvoie vers la page du choix des filtres
     start_btn = ft.ElevatedButton(
     content=ft.Text("Start →", font_family="Times New Roman", size=16, weight=ft.FontWeight.BOLD),
     style=ft.ButtonStyle(
@@ -44,13 +54,12 @@ def accueil_view(page):
         padding=20,
         bgcolor="white",
         side=ft.BorderSide(2, "black"),
-        color="black",
-    ),
-    on_click=lambda e: page.go("/filters")
-    )
+        color="black"),
+        on_click=lambda e: page.go("/filters")
+        )
 
-    # IMAGES superposées
     
+    #Ajout des images d'accueil
     # Récupération des chemins absolus pour accéder aux images 
     liste_chemins_absolus = []
     for i in range(3):
@@ -58,42 +67,32 @@ def accueil_view(page):
         chemin_absolu = os.path.abspath(chemin_relatif)
         liste_chemins_absolus.append(chemin_absolu)
         
-    # IMAGES superposées
     img_stack = ft.Stack([
-    # Image 3 : tout au fond, la plus grande
-    ft.Image(src=liste_chemins_absolus[2], width=510, top=10, left=25 ,bottom = 3),
-
-
-    # Image 2 : par-dessus, centrée
-    ft.Image(src=liste_chemins_absolus[0], width=500, top=3, left=15,bottom = 50),
-
-    # Image 1 : légèrement décalée
-    ft.Image(src=liste_chemins_absolus[1],  width=480, top=11, left=10, bottom =0),
+        ft.Image(src=liste_chemins_absolus[2], width=510, top=10, left=25 ,bottom = 3),
+        ft.Image(src=liste_chemins_absolus[0], width=500, top=3, left=15,bottom = 50),
+        ft.Image(src=liste_chemins_absolus[1],  width=480, top=11, left=10, bottom =0),
                 ], width=470, height=290)
 
     
-    # ORGANISATION horizontale : texte + images
+    # Organisation de l'affichege du texte et des images
     content = ft.Row([
-        ft.Column([
-            description,
-            ft.Container(start_btn, padding=20)
-        ], expand=1, alignment="start", spacing=30),
-        img_stack
-    ], alignment="center", spacing=0)
+        ft.Column([description,
+                   ft.Container(start_btn, padding=20)
+                   ], expand=1, alignment="start", spacing=30),
+        img_stack], alignment="center", spacing=0)
 
-    # ASSEMBLAGE FINAL
+    # Layout final
     page.add(
-    top_bar,
+    tutoriel,
     ft.Container(title, alignment=ft.alignment.center, padding=0),
     ft.Container(subtitle, alignment=ft.alignment.center, padding=5),
     ft.Divider(thickness=1),
     ft.Container(content, padding=ft.padding.only(top=20)))
-    controls=[
-        top_bar,
-        ft.Container(title, alignment=ft.alignment.center, padding=0),
-        ft.Container(subtitle, alignment=ft.alignment.center, padding=5),
-        ft.Divider(thickness=1),
-        ft.Container(content, padding=ft.padding.only(top=20))
-    ]
+    controls=[tutoriel,
+            ft.Container(title, alignment=ft.alignment.center, padding=0),
+            ft.Container(subtitle, alignment=ft.alignment.center, padding=5),
+            ft.Divider(thickness=1),
+            ft.Container(content, padding=ft.padding.only(top=20))]
 
+    
     return ft.View( route="/",controls = controls ,scroll="auto",padding=15,bgcolor="white")
