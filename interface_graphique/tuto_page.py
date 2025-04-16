@@ -7,16 +7,13 @@ Created on Tue Mar 25 22:37:40 2025
 """
 
 import flet as ft
-import asyncio
 
-async def tutorial_window(page: ft.Page):
+def tutorial_window(page: ft.Page):
     """
     This is the code responsible to the tutorial of FaceGen.
     The tutorial appears in a new window, independant from the main one.
     """
     page.title = "Tutorial"
-    page.window_width = 600
-    page.window_height = 420
     page.bgcolor = "white"
     page.scroll = "auto"
 
@@ -79,3 +76,8 @@ async def tutorial_window(page: ft.Page):
 
 async def open_tutorial(e):
     await ft.app_async(target=tutorial_window)
+    
+    
+    
+    
+    

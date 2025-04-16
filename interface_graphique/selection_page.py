@@ -22,6 +22,10 @@ IMAGE_DIR = chemin_absolu
 def get_generated_images(DIR):
     """
     Recupere les images generees par l'auto-encodeur
+    INPUT:
+        Dossier ou sont stockees les images
+    OUTPUT:
+        les images du dossier
     
     """
     all_images = [f for f in os.listdir(DIR) if f.lower().endswith((".png", ".jpg", ".jpeg"))]
@@ -30,7 +34,13 @@ def get_generated_images(DIR):
 
 def bordure_image(img_info):
     """
-    Applique ou retire le style de bordure et de zoom selon l'état sélectionné.
+    Applique ou retire le style de bordure et de zoom selon l'état sélectionné
+    INPUT :
+        img_info: dictionnaire 
+                { "img_name": <str>, #nom de l'img
+                 "control": <ft.Container>, # objt flet contenant l'img
+                 "selected": <bool> #etat de l'image selectionnee ou pas 
+                    }
     """
     if img_info["selected"]:
         img_info["control"].border = ft.border.all(3, "blue")
@@ -45,7 +55,27 @@ def bordure_image(img_info):
     
 def update_selection_list(img_info, selected_names, barre_miniatures, page):
     """
-    Ajoute ou retire l'image de la sélection et met à jour la barre de miniatures.
+    Ajoute ou retire l'image de la sélection et met à jour la barre de miniatures
+
+    Parameters
+    ----------
+    img_info : dict
+                { "img_name": <str>, #nom de l'img
+                 "control": <ft.Container>, # objt flet contenant l'img
+                 "selected": <bool> #etat de l'image selectionnee ou pas 
+                    }
+        
+    selected_names : Liste
+            liste des noms des images selectionnees
+    barre_miniatures : Objt flet (ft.column)
+            contient les miniatures des images
+    page : ft.page
+        objt flet qui represente la page
+
+    Returns
+    -------
+    None
+
     """
     img_name = img_info["img_name"]
 
@@ -72,7 +102,28 @@ def update_selection_list(img_info, selected_names, barre_miniatures, page):
 
 def image_click_state(e, img_info, selected_names, barre_miniatures, page):
     """
-    Gère le clic utilisateur : met à jour l'état sélectionné, l'apparence et les miniatures.
+    Gère le clic du user : mise a jour de l'etat de l'image et l'apparence des miniatures 
+
+    Parameters
+    ----------
+    e : ft.ControlEvent
+        Correspond a l'evenment declenche par un click du user
+    img_info : dict
+            { "img_name": <str>, #nom de l'img
+             "control": <ft.Container>, # objt flet contenant l'img
+             "selected": <bool> #etat de l'image selectionnee ou pas 
+                }
+    selected_names : list
+        liste des noms des images selectionnees
+    barre_miniatures : Objt flet (ft.column)
+            contient les miniatures des images
+    page : ft.page
+        objt flet qui represente la page
+
+    Returns
+    -------
+    None.
+
     """
     img_info["selected"] = not img_info["selected"]
     bordure_image(img_info)
@@ -83,17 +134,21 @@ def image_click_state(e, img_info, selected_names, barre_miniatures, page):
 
 def load_images(page,image_container,displayed_images,on_image_click, regenerate=False):
     """
+    Charge et affiche dynamiquement les images de la page
+        - vide les conteneurs d'images actuels
+        - Si regenerate = True : la fct appelle mutate() qui recharge des images mutees dans le dossier generated_images
+        - Affiche les nouvelles images
     Parameters
     ----------
     page : objet Flet
          pour pouvoir rafraichir la page a chaque appel de la fonction
-    image_container : liste
-        DESCRIPTION.
-    displayed_images : TYPE
-        DESCRIPTION.
-    toggle_selection : TYPE
-        DESCRIPTION.
-
+    image_container : ft.Row objet flet
+            conteneur qui contient toutes les images
+    displayed_images : liste de dict
+        liste qui contient le dict img_info de chaque image
+    on_image_click : fonctio
+        fonction callback executee quand l'image est clickee
+        
     Returns
     -------
     None.
@@ -158,16 +213,15 @@ def save_selected_images(page, thumbnail_selected_images, e):
     
     page.go("/selected")
     
-def show_panel(thumbnail_panel, page):
+def show_panel(barre_miniatures_container, page):
     """
     affiche ou masque le panneau de miniatures 
-    inverse l'état de visibilité du composant `thumbnail_panel`
     
     Returns
     -------
     None
     """
-    thumbnail_panel.visible = not thumbnail_panel.visible
+    barre_miniatures_container.visible = not barre_miniatures_container.visible
     page.update()
     
     
@@ -181,12 +235,35 @@ def clear_thumbnail(e, selected_names, barre_miniatures, page):
         
     
 def mutate():
+    """
+    Applique l'algorithme de mutation via le pipeline LatentFusionPipeline
+
+    Returns
+    -------
+    None.
+
+    """
     pipeline = LatentFusionPipeline(n_outputs=6)
     pipeline.run()
     #print("Images après mutation :", os.listdir(IMAGE_DIR))
     
     
 def handle_single_download(image_name, page):
+    """
+    - telecharge l'image selectionnee en la copiant dans un dossier local a l'aide du package shutil
+    - ouvre l'image telechargee via l'explorateur de fichier
+
+    Parameters
+    ----------
+    image_name : str
+        nom de l'image
+    page : ft.page objt flet
+
+    Returns
+    -------
+    None.
+
+    """
     src = Path(IMAGE_DIR) / image_name
     dst_dir = Path("downloads")
     dst_dir.mkdir(exist_ok=True)
@@ -202,18 +279,12 @@ def handle_single_download(image_name, page):
     page.launch_url(f"file://{dst.resolve()}")
 
 
-    
-def afficher_message(text_widget, message, page, color=ft.colors.RED):
-    text_widget.value = message
-    text_widget.color = color
-    text_widget.visible = True
-    page.update()
-
-def close_dialog(page):
-    page.dialog.open = False
-    page.update()
-    
 def handle_mutate_click(page, selected_names, image_container, displayed_images, barre_miniatures, message_text):
+    """
+    Gere le clic sur le bouton 'mutate' :
+        Si une ou plusieurs images sont selection, la fonction load_images esf appelee pour afficher les images mutees
+        Sinon un message d'erreur est affiche
+    """
     if len(selected_names) >= 1:
         load_images(
             page,
@@ -225,21 +296,66 @@ def handle_mutate_click(page, selected_names, image_container, displayed_images,
     else:
         afficher_message(message_text, "Mutation Error : Select images to mutate.", page)
 
-def handle_download_click(page, selected_names,message_text):
+def handle_download_click(page, selected_names,message_text): 
+    """
+    Gere le clic sur le bouton 'download':
+        si une seule image est selectionnee, on appelle handle_single_download pour telecharger l'image
+        sinon : un msg d'erreur est affiche'
+    """
     if len(selected_names) == 1:
         handle_single_download(selected_names[0], page)
     else:
         afficher_message(message_text, "Download Error: Please select exactly one image to download.",page)
+        
+        
     
+def afficher_message(text_widget, message, page, color=ft.colors.RED):
+    """
+    
+
+    Parameters
+    ----------
+    text_widget : objt flet ft.text 
+        composant texte dans lequel le msg va s'afficher
+    message : str
+        contenu du message a afficher
+    page : objt flet ft.page
+    color : str, optional
+        couleur du msg affiche
+
+    Returns
+    -------
+    None.
+
+    """
+    text_widget.value = message
+    text_widget.color = color
+    text_widget.visible = True
+    page.update()
+
 def reset_message(text_widget, page):
+    """
+    Supprime le texte d'erreur une fois la page est rechargee
+    
+    Returns
+    -------
+    None.
+
+    """
     text_widget.value = ""
     text_widget.visible = False
     page.update()
     
+
+    
     
 def select_view(page: ft.Page):
+    """
+    Permet d'afficher la page 
+    """
     font_family = "Times New Roman"
 
+    
     displayed_images = []
     selected_names = []
     barre_miniatures = ft.Column(wrap=True, spacing=5) #wrap = True => 
@@ -278,20 +394,19 @@ def select_view(page: ft.Page):
         ft.FilledButton("Go Back", on_click=lambda e: page.go("/filters")),
         ft.FilledButton(
             "Mutate",
-            reset_message(message_text, page),
+            #reset_message(message_text, page),
             on_click=lambda e: handle_mutate_click(
                 page, selected_names, image_container, displayed_images, barre_miniatures, message_text
             )
         ),
         ft.FilledButton(
             "Download",
-            reset_message(message_text, page),
+            #reset_message(message_text, page),
             on_click=lambda e: handle_download_click(page, selected_names, message_text)
         )
     ],
     alignment="center",
-    spacing=20
-)
+    spacing=20)
 
     layout = ft.Column(
         [

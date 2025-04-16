@@ -1,129 +1,138 @@
-
 import flet as ft
 import json
-
 from interactions.generator_images import ImageGenerator
 
 
+def confirm_choices(e, page, dropdowns):
+    """
+    -Enregistre les filtres choisis par l'utilisateur dans un fichier json
+    -Genere les images correspondante par l'autoencodeur
+    -renvoie vers la page suivante
+
+    Parameters
+    ----------
+    e : ft.ControlEvent
+        Traduit le clic de l'utilisateur sur un bouton'
+    page : ft.page
+
+    dropdowns : dict
+        {nom_du_filtre: objet_dropdown(contient les differentes versions de l'attribut)}
+
+    Returns
+    -------
+    None.
+
+    """
+    filters_dict = {
+        key: dropdown.value if dropdown.value is not None else "Unknown"
+        for key, dropdown in dropdowns.items()
+    }
+
+    with open("interface_graphique/filtres.json", "w", encoding="utf-8") as fichier_json:
+        json.dump(filters_dict, fichier_json, ensure_ascii=False, indent=4)
+
+    # Génération des images filtrees
+    generator = ImageGenerator()
+    generator.generate_all()
+    page.go("/select")
+    
+    
+    
 def filters_view(page: ft.Page):
+    """
+    Affiche la page de sélection des attributs qui vont servir a filtrer les images proposees a l'utilisateur
+    Appelle la fonction callback 'confirm_choices' qui est en lien avec l'auto-encodeur au moment de confirmation des choix de l'utilisateur
+
+    """
+    
+    #choix de la police d'ecriture
     font_family = "Times New Roman"
 
-    # -- Titre 
+    #titre 
     title = ft.Text("Build profil", size=28, weight=ft.FontWeight.BOLD, text_align="center", font_family=font_family)
 
-    # -- Dropdowns compatibles avec l'autoencodeur
+
+    # Liste des attributs binaires
+    binary_attributes = [
+        "Sideburns", "Bangs", "No_Beard", "Wearing_Necktie", "Big_Lips",
+        "Wearing_Lipstick", "Straight_Hair", "Chubby", "Big_Nose", "Pointy_Nose",
+        "Goatee", "Male", "Receding_Hairline", "Wearing_Necklace", "Eyeglasses",
+        "Wavy_Hair", "Wearing_Earrings", "Young"
+    ]
+    
+    # Attribut non binaire
+    non_binary_attributes = {"Hair_Color": ["Black", "Brown", "Blond", "Unknown"]}
+    
+    # Options pour les attributs binaires
+
     binary_options = [
         ft.dropdown.Option("Yes"),
         ft.dropdown.Option("No"),
         ft.dropdown.Option("Unknown")
     ]
 
-    hair_color_dropdown = ft.Dropdown(
-        label="Hair Color",
-        hint_text="choose",
-        options=[
-            ft.dropdown.Option("Black"),
-            ft.dropdown.Option("Brown"),
-            ft.dropdown.Option("Blond"),
-            ft.dropdown.Option("Unknown")
-        ],
-        width=200
-    )
+    
+    # Creation des dropdowns
+    dropdowns = {}
+    for attr in binary_attributes:
+        dropdowns[attr] = ft.Dropdown(
+            label=attr.replace("_", " "),
+            hint_text="choose",
+            options=binary_options,
+            width=200
+        )
+    dropdowns["Hair_Color"] = ft.Dropdown(
+                                label="Hair Color",
+                                hint_text="choose",
+                                options=[ft.dropdown.Option(opt) for opt in non_binary_attributes["Hair_Color"]],
+                                width=200
+                            )
+        
+    # Séparer les dropdowns en trois colonnes
 
-    sideburns_dropdown = ft.Dropdown(label="Sideburns", hint_text="choose", options=binary_options, width=200)
-    bangs_dropdown = ft.Dropdown(label="Bangs", hint_text="choose", options=binary_options, width=200)
-    no_beard_dropdown = ft.Dropdown(label="No Beard", hint_text="choose", options=binary_options, width=200)
-    wearing_necktie_dropdown = ft.Dropdown(label="Wearing Necktie", hint_text="choose", options=binary_options, width=200)
-    big_lips_dropdown = ft.Dropdown(label="Big Lips", hint_text="choose", options=binary_options, width=200)
-    wearing_lipstick_dropdown = ft.Dropdown(label="Wearing Lipstick", hint_text="choose", options=binary_options, width=200)
-    straight_hair_dropdown = ft.Dropdown(label="Straight Hair", hint_text="choose", options=binary_options, width=200)
-    chubby_dropdown = ft.Dropdown(label="Chubby", hint_text="choose", options=binary_options, width=200)
-    big_nose_dropdown = ft.Dropdown(label="Big Nose", hint_text="choose", options=binary_options, width=200)
-    pointy_nose_dropdown = ft.Dropdown(label="Pointy Nose", hint_text="choose", options=binary_options, width=200)
-    goatee_dropdown = ft.Dropdown(label="Goatee", hint_text="choose", options=binary_options, width=200)
-    male_dropdown = ft.Dropdown(label="Male", hint_text="choose", options=binary_options, width=200)
-    receding_hairline_dropdown = ft.Dropdown(label="Receding Hairline", hint_text="choose", options=binary_options, width=200)
-    wearing_necklace_dropdown = ft.Dropdown(label="Wearing Necklace", hint_text="choose", options=binary_options, width=200)
-    eyeglasses_dropdown = ft.Dropdown(label="Eyeglasses", hint_text="choose", options=binary_options, width=200)
-    wavy_hair_dropdown = ft.Dropdown(label="Wavy Hair", hint_text="choose", options=binary_options, width=200)
-    wearing_earrings_dropdown = ft.Dropdown(label="Wearing Earrings", hint_text="choose", options=binary_options, width=200)
-    young_dropdown = ft.Dropdown(label="Young", hint_text="choose", options=binary_options, width=200)
-
-    # -- Fonction appelée quand l'utilisateur clique sur "Confirm choices"
-    def confirm_choices(e):
-        dropdowns = {
-            "Hair_Color": hair_color_dropdown,
-            "Sideburns": sideburns_dropdown,
-            "Bangs": bangs_dropdown,
-            "No_Beard": no_beard_dropdown,
-            "Wearing_Necktie": wearing_necktie_dropdown,
-            "Big_Lips": big_lips_dropdown,
-            "Wearing_Lipstick": wearing_lipstick_dropdown,
-            "Straight_Hair": straight_hair_dropdown,
-            "Chubby": chubby_dropdown,
-            "Big_Nose": big_nose_dropdown,
-            "Pointy_Nose": pointy_nose_dropdown,
-            "Goatee": goatee_dropdown,
-            "Male": male_dropdown,
-            "Receding_Hairline": receding_hairline_dropdown,
-            "Wearing_Necklace": wearing_necklace_dropdown,
-            "Eyeglasses": eyeglasses_dropdown,
-            "Wavy_Hair": wavy_hair_dropdown,
-            "Wearing_Earrings": wearing_earrings_dropdown,
-            "Young": young_dropdown
-        }
-
-        filters_dict = {
-            key: dropdown.value if dropdown.value is not None else "Unknown"
-            for key, dropdown in dropdowns.items()
-        }
-        with open("interface_graphique/filtres.json", "w", encoding="utf-8") as fichier_json:
-            json.dump(filters_dict, fichier_json, ensure_ascii=False, indent=4)
-
-        generator = ImageGenerator()
-        generator.generate_all(first_run=True)
-        page.go("/select")
-
-    # -- Colonnes
     col_left = ft.Column([
-        hair_color_dropdown,
-        sideburns_dropdown,
-        bangs_dropdown,
-        no_beard_dropdown,
-        wearing_necktie_dropdown,
-        big_lips_dropdown,
-        wearing_lipstick_dropdown
+        dropdowns["Hair_Color"],
+        dropdowns["Sideburns"],
+        dropdowns["Bangs"],
+        dropdowns["No_Beard"],
+        dropdowns["Wearing_Necktie"],
+        dropdowns["Big_Lips"],
+        dropdowns["Wearing_Lipstick"],
     ], spacing=15)
-
+    
     col_center = ft.Column([
-        straight_hair_dropdown,
-        chubby_dropdown,
-        big_nose_dropdown,
-        pointy_nose_dropdown,
-        goatee_dropdown,
-        male_dropdown
+        dropdowns["Straight_Hair"],
+        dropdowns["Chubby"],
+        dropdowns["Big_Nose"],
+        dropdowns["Pointy_Nose"],
+        dropdowns["Goatee"],
+        dropdowns["Male"],
     ], spacing=15)
-
+    
     col_right = ft.Column([
-        receding_hairline_dropdown,
-        wearing_necklace_dropdown,
-        eyeglasses_dropdown,
-        wavy_hair_dropdown,
-        wearing_earrings_dropdown,
-        young_dropdown
+        dropdowns["Receding_Hairline"],
+        dropdowns["Wearing_Necklace"],
+        dropdowns["Eyeglasses"],
+        dropdowns["Wavy_Hair"],
+        dropdowns["Wearing_Earrings"],
+        dropdowns["Young"],
     ], spacing=15)
 
-    # -- Boutons
+
+    #Boutons "go back" et "confirm choices"
+
     button_row = ft.Row([
         ft.FilledButton("Go Back", on_click=lambda e: page.go("/")),
-        ft.FilledButton("Confirm choices", on_click=confirm_choices)
-    ], alignment="center", spacing=20)
+        ft.FilledButton("Confirm choices", on_click=lambda e: confirm_choices(e, page, dropdowns))
+        ], alignment="center", spacing=20)
 
-    # -- Mise en page finale
+
+    # layout final
     layout = ft.Column([
         title,
         ft.Row([col_left,col_center, col_right], alignment="center", spacing=60),
         ft.Container(button_row, alignment=ft.alignment.center, padding=20)
     ], horizontal_alignment="center", spacing=20)
 
+    
     return ft.View(route="/filters", controls=[layout], scroll="auto", bgcolor="white")
