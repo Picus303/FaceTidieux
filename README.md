@@ -7,6 +7,20 @@ Customizable face generator with filter controls and multi-face blending, powere
 - Python = 3.12.7
 - pip
 
+## If you want to use a virtual environnement
+
+1. Venv
+   Venv :
+    ```bash
+   python3 -m venv venv_FaceGenTool
+   source venv_FaceGenTool/bin/activate
+
+2. Conda :
+    ```bash
+   conda create -n conda_FaceGenTool python=3.7
+   conda activate conda_FaceGenTool
+
+
 ## Installation
 
 1. If you don't have the physical support, you can clone the repository:
@@ -20,15 +34,9 @@ Customizable face generator with filter controls and multi-face blending, powere
 
 
 ## Run the app
+ 
 
-
-1. If you want to use a virtual environnement
-   Venv :
-    ```bash
-   python3 -m venv venv_FaceGenTool
-   source venv_FaceGenTool/bin/activate   
-
-2. Launch the app
+1. Launch the app
     ```bash
    python3 main.py
 
