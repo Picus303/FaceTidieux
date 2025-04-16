@@ -8,7 +8,10 @@ Created on Wed Mar 26 10:56:26 2025
 
 import flet as ft
 import os
+import shutil
+from pathlib import Path
 import json
+from interactions.generator_fusion_images import LatentFusionPipeline
 
 
 chemin_relatif = f"generate_images"
@@ -78,7 +81,7 @@ def image_click_state(e, img_info, selected_names, barre_miniatures, page):
     
     
 
-def load_images(images,page,image_container,displayed_images,on_image_click):
+def load_images(page,image_container,displayed_images,on_image_click, regenerate=False):
     """
     Parameters
     ----------
@@ -96,16 +99,18 @@ def load_images(images,page,image_container,displayed_images,on_image_click):
     None.
 
     """
+    if regenerate :
+        mutate()
     image_container.controls.clear()
     displayed_images.clear()
     
     #on affiche chaque image recuperee de generated_images
-    #images = get_generated_images(DIR)
+    images = get_generated_images(IMAGE_DIR)
     for img_name in images:
         img_path = os.path.join(IMAGE_DIR, img_name)
         
         #Transforme l'img en objet flet
-        image_control = ft.Image(src=img_path,width=140,height=140,fit=ft.ImageFit.COVER)
+        image_control = ft.Image(src=img_path,width=200,height=200,fit=ft.ImageFit.COVER)
 
         # Conteneur autour de l'image : applique une bordure quand l'image est selectionnée
         container = ft.Container(content=image_control,border=None,)
@@ -124,6 +129,8 @@ def load_images(images,page,image_container,displayed_images,on_image_click):
     page.update()
     return img_info 
 
+
+    
 def save_selected_images(page, thumbnail_selected_images, e):
     """
     Sauvegarde les images selectionnees dans une fichier json, puis redirige le user vers la page du resulats de la mutation
@@ -164,18 +171,72 @@ def show_panel(thumbnail_panel, page):
     page.update()
     
     
-def clear_thumbnail(e, thumbnail_selected_images, selected_thumbnails, page):
+def clear_thumbnail(e, selected_names, barre_miniatures, page):
     """
-    Vide la liste des noms d’images sélectionnées : thumbnail_selected_images
-    Vide la barre visuelle des miniatures sélectionnées : selected_thumbnails.controls
-    Rafraichit la page
-
+    Vide la sélection actuelle : noms sélectionnés + barre visuelle.
     """
-    thumbnail_selected_images.clear()
-    selected_thumbnails.controls.clear()
+    selected_names.clear()  # vide la liste des noms sélectionnés
+    barre_miniatures.controls.clear()  # vide les miniatures affichées
     page.update()
         
-        
+    
+def mutate():
+    pipeline = LatentFusionPipeline(n_outputs=6)
+    pipeline.run()
+    #print("Images après mutation :", os.listdir(IMAGE_DIR))
+    
+    
+def handle_single_download(image_name, page):
+    src = Path(IMAGE_DIR) / image_name
+    dst_dir = Path("downloads")
+    dst_dir.mkdir(exist_ok=True)
+    dst = dst_dir / image_name
+
+    if not src.exists():
+        page.snack_bar = ft.SnackBar(ft.Text("Image not found."))
+        page.snack_bar.open = True
+        page.update()
+        return
+
+    shutil.copy2(src, dst)
+    page.launch_url(f"file://{dst.resolve()}")
+
+
+    
+def afficher_message(text_widget, message, page, color=ft.colors.RED):
+    text_widget.value = message
+    text_widget.color = color
+    text_widget.visible = True
+    page.update()
+
+def close_dialog(page):
+    page.dialog.open = False
+    page.update()
+    
+def handle_mutate_click(page, selected_names, image_container, displayed_images, barre_miniatures, message_text):
+    if len(selected_names) >= 1:
+        load_images(
+            page,
+            image_container,
+            displayed_images,
+            lambda e, img_info: image_click_state(e, img_info, selected_names, barre_miniatures, page),
+            regenerate=True
+        )
+    else:
+        afficher_message(message_text, "Mutation Error : Select images to mutate.", page)
+
+def handle_download_click(page, selected_names,message_text):
+    if len(selected_names) == 1:
+        handle_single_download(selected_names[0], page)
+    else:
+        afficher_message(message_text, "Download Error: Please select exactly one image to download.",page)
+    
+def reset_message(text_widget, page):
+    text_widget.value = ""
+    text_widget.visible = False
+    page.update()
+    
+    
 def select_view(page: ft.Page):
     font_family = "Times New Roman"
 
@@ -183,17 +244,18 @@ def select_view(page: ft.Page):
     selected_names = []
     barre_miniatures = ft.Column(wrap=True, spacing=5) #wrap = True => 
     image_container = ft.Row(wrap=True, alignment="center", spacing=10)
-    images = get_generated_images(IMAGE_DIR)
     
     
-    load_images(images,
-                page,
+    load_images(page,
                 image_container,
                 displayed_images,
-                lambda e, img_info: image_click_state(e, img_info, selected_names, barre_miniatures, page))
+                lambda e, img_info: image_click_state(e, img_info, selected_names, barre_miniatures, page),
+                regenerate=False)
+    
+    
     
     title = ft.Text(
-        "Select one ore more portraits",
+        "Select one ore more portraits to mutate",
         size=22,
         weight=ft.FontWeight.BOLD,
         font_family=font_family
@@ -208,20 +270,41 @@ def select_view(page: ft.Page):
 
     # Bouton pour vider la sélection
     clear_button = ft.IconButton(icon=ft.icons.DELETE,tooltip="Clear selected",on_click=lambda e: clear_thumbnail(e, selected_names, barre_miniatures, page))
-    
- 
-    
-    # Boutons "Go Back" et "Confirm and mutate"
+
+    # Texte d'information / erreur
+    message_text = ft.Text("", color=ft.colors.RED, size=16, visible=False)
     button_row = ft.Row(
-    [ft.FilledButton("Go Back", on_click=lambda e: page.go("/filters")),
-     ft.FilledButton("Confirm and mutate", on_click=lambda e: save_selected_images(page, selected_names, e))],
-            alignment="center",
-            spacing=20)
-    
-    layout = ft.Column([ft.Container(title, alignment=ft.alignment.center, padding=20),
-                            image_container,
-                            ft.Container(button_row, alignment=ft.alignment.center, padding=20)],
-                            horizontal_alignment="center",spacing=20)
+    [
+        ft.FilledButton("Go Back", on_click=lambda e: page.go("/filters")),
+        ft.FilledButton(
+            "Mutate",
+            reset_message(message_text, page),
+            on_click=lambda e: handle_mutate_click(
+                page, selected_names, image_container, displayed_images, barre_miniatures, message_text
+            )
+        ),
+        ft.FilledButton(
+            "Download",
+            reset_message(message_text, page),
+            on_click=lambda e: handle_download_click(page, selected_names, message_text)
+        )
+    ],
+    alignment="center",
+    spacing=20
+)
+
+    layout = ft.Column(
+        [
+            ft.Container(title, alignment=ft.alignment.center, padding=20),
+            message_text,  # ← Message visible ici
+            image_container,
+            ft.Container(button_row, alignment=ft.alignment.center, padding=20)
+        ],
+        horizontal_alignment="center",
+        spacing=20
+    )
+
+
 
     
     # Positionner en haut a droite

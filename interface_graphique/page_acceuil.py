@@ -14,8 +14,6 @@ def accueil_view(page):
     # Police personnalisée
     font_family = "Times New Roman"
 
-    # TOP BAR avec boutons gauche/droite
-  #  ft.TextButton(content=ft.Text("Commencer - Présentation", font_family="Times New Roman", size=14), on_click=lambda e: print("Présentation")),
   # TOP BAR
     top_bar = ft.Row([
         ft.TextButton(
@@ -35,7 +33,7 @@ def accueil_view(page):
     ft.Text("• Optionally apply filters to refine the selection.", italic=True, color="black", font_family="Times New Roman", size=15),
     ft.Text("• With a single portrait, generate multiple variations.", italic=True, color="black", font_family="Times New Roman", size=15),
     ft.Text("• With multiple portraits, combine them to evolve new faces.", italic=True, color="black", font_family="Times New Roman", size=15),
-], spacing=5, alignment="start")
+    ], spacing=5, alignment="start")
 
 
     # BOUTON stylé
@@ -49,7 +47,7 @@ def accueil_view(page):
         color="black",
     ),
     on_click=lambda e: page.go("/filters")
-)
+    )
 
     # IMAGES superposées
     
@@ -71,8 +69,7 @@ def accueil_view(page):
 
     # Image 1 : légèrement décalée
     ft.Image(src=liste_chemins_absolus[1],  width=480, top=11, left=10, bottom =0),
-
-], width=470, height=290)
+                ], width=470, height=290)
 
     
     # ORGANISATION horizontale : texte + images
@@ -91,17 +88,12 @@ def accueil_view(page):
     ft.Container(subtitle, alignment=ft.alignment.center, padding=5),
     ft.Divider(thickness=1),
     ft.Container(content, padding=ft.padding.only(top=20)))
+    controls=[
+        top_bar,
+        ft.Container(title, alignment=ft.alignment.center, padding=0),
+        ft.Container(subtitle, alignment=ft.alignment.center, padding=5),
+        ft.Divider(thickness=1),
+        ft.Container(content, padding=ft.padding.only(top=20))
+    ]
 
-    return ft.View(
-       route="/",
-       controls=[
-           top_bar,
-           ft.Container(title, alignment=ft.alignment.center, padding=0),
-           ft.Container(subtitle, alignment=ft.alignment.center, padding=5),
-           ft.Divider(thickness=1),
-           ft.Container(content, padding=ft.padding.only(top=20))
-       ],
-       scroll="auto",
-       padding=15,
-       bgcolor="white"
-)
+    return ft.View( route="/",controls = controls ,scroll="auto",padding=15,bgcolor="white")

@@ -9,14 +9,6 @@ GENERATED_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "generate_images"
 
 displayed_images = []
 
-def get_next_mutation_folder(base="mutated_images"):
-    i = 1
-    while True:
-        folder_name = os.path.join(os.path.dirname(GENERATED_DIR), f"{base}{i}")
-        if not os.path.exists(folder_name):
-            os.makedirs(folder_name)
-            return folder_name
-        i += 1
 
 def regenerate_and_store_mutation():
     pipeline = LatentFusionPipeline(n_outputs=6)
@@ -24,7 +16,6 @@ def regenerate_and_store_mutation():
 
 
 def mutated_selection_view(page: ft.Page):
-    #global current_mutation_dir
     image_container = ft.Row(wrap=True, alignment="center", spacing=10)
 
     dropdown_visible = False
